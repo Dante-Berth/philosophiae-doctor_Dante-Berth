@@ -1,0 +1,1007 @@
+iScience
+
+ll
+OPEN ACCESS
+
+Article
+An agent-based model of monocyte differentiation into tumour-associated macrophages in chronic lymphocytic leukemia
+
+1 Experimental data
+
+2 Agent-Based Model design
+
+Purification of Peripheral Blood Mononuclear Cells from Chronic Lymphocytic Leukemia patients
+
+Leukemic B cells Myeloid immune cells
+NeedSignal Apoptotic Dead Monocyte Macrophage NLC
+
+Monitoring of cancer cell viability and concentration over 13 days
+
+macroφeff macrosd
+
+cell state transition
+
+activation inhibition phagocytosis killing
+
+monosd
+Monocyte
+monodNi(f0f ,σ)
+
+monoφeff
+
+monodiff threshold
+
+macroNnl(cμ-,pσo) l
+
+macro Macrophage
+
+keff
+
+nlcthreshold layersnlc
+
+nnssmsdp
+
+apothreshoaldpomp
+
+deaththreshold
+
+Need
+ns Signal life-init Γ(α,β)
+
+Apoptotic
+
+Dead
+
+anti-apoboost
+
+NLC
+nlcsd nlcφeff
+
+3
+
+Bi-objective model parameter optimization
+
+4
+
+Patient-specific models identify two classes related to distinct macrophage phenotypes
+
+Class A Protective NLCs High CLL cell viability
+
+Class B Non-protective NLCs Low CLL cell viability
+
+monodiff threshold
+
+macronNlμc-pol
+
+nlcφeff
+
+anti-apoboost
+
+Nina Verstraete, Malvina Marku, Marcin Domagala, ..., Lo¨ıc Ysebaert, Mary Poupot, Vera Pancaldi
+vera.pancaldi@inserm.fr
+Highlights Patient blood-derived cultures track tumorassociated macrophage formation in vitro
+Agent-based model predicts macrophage polarization and cancer cell survival dynamics
+Patient-speciﬁc models identify two groups with distinct macrophage phenotypes
+Phagocytosis efﬁciencies and cancer cell heterogeneity drive the observed dynamics
+
+Verstraete et al., iScience 26, 106897 June 16, 2023 ª 2023 The Authors. https://doi.org/10.1016/ j.isci.2023.106897
+
+iScience
+
+ll
+OPEN ACCESS
+
+Article
+An agent-based model of monocyte differentiation into tumour-associated macrophages in chronic lymphocytic leukemia
+
+Nina Verstraete,1 Malvina Marku,1 Marcin Domagala,1 He´ le` ne Arduin,1 Julie Bordenave,1 Jean-Jacques Fournie´ ,1 Loı¨c Ysebaert,3 Mary Poupot,1 and Vera Pancaldi1,2,4,*
+
+SUMMARY
+Monocyte-derived macrophages help maintain tissue homeostasis and defend the organism against pathogens. In tumors, recent studies have uncovered complex macrophage populations, including tumor-associated macrophages, which support tumorigenesis through cancer hallmarks such as immunosuppression, angiogenesis, or matrix remodeling. In the case of chronic lymphocytic leukemia, these macrophages are known as nurse-like cells (NLCs) and they protect leukemic cells from spontaneous apoptosis, contributing to their chemoresistance. We propose an agent-based model of monocyte differentiation into NLCs upon contact with leukemic B cells in vitro. We performed patient-speciﬁc model optimization using cultures of peripheral blood mononuclear cells from patients. Using our model, we were able to reproduce the temporal survival dynamics of cancer cells in a patientspeciﬁc manner and to identify patient groups related to distinct macrophage phenotypes. Our results show a potentially important role of phagocytosis in the polarization process of NLCs and in promoting cancer cells’ enhanced survival.
+INTRODUCTION
+Advances in cancer therapies focusing on tumor-inﬁltrating immune cells have led to a dramatic improvement in the survival of some patients. These therapies are mainly based on the reactivation of immune cells that normally detect and eliminate cancer cells and whose cytotoxic activity is inhibited within tumors. However, the great progress offered by these approaches is hampered by the limited response rate that is observed in around two-thirds of the patients.1 Reasons for the low response rates are sought in the intrinsic characteristics of the tumor, but also in the presence of a speciﬁc tumor microenvironment (TME) that either prevents potential immune effector cells from entering the tumor or renders them ineffective in ﬁghting malignant cells. The revolution of immune therapies resulted in a paradigm shift in our understanding of cancer and the more we discover about the various cells present in tumors and the speciﬁc ways in which they interact with each other, the better we will be able to tune the TME to arrest tumor growth.
+In recent years, the research focus has been mostly on anti-tumoral T lymphocytes, but in many cancers the presence of myeloid cells interferes with their killing action. In this project, we aim to better characterize the myeloid cells which protect the cancer cells from attack by T cells and promote tumor growth. It has long been known that tumors involve high levels of inﬂammation and for this reason macrophages are found in abundance in tumor biopsies.2,3 Macrophages derive either from circulating monocytes or from embryonic progenitors,4 and are usually described to be in two opposite states as pro-inﬂammatory (M1) or anti-inﬂammatory (M2) macrophages, depending on their environmental signals.5,6 However, recent single-cell studies identiﬁed a broader spectrum of phenotypes also impacting their speciﬁc functions such as phagocytosis, immunoregulation, matrix deposition, tissue remodeling, and tumor resistance to therapy.7,8 In tumors, macrophages can be educated by the cancer cells to promote their growth, becoming tumor associated macrophages (TAM).3,9 Activation of the TAM polarization pathway leads to the secretion of several cytokines, such as CXCL12/13, IL-10, and IL-6/IL-8, which are reported to have a pro-tumoral effect,10,11 providing protection to the cancer cells.
+A similar ecology of cancer cells and macrophages is established in the case of chronic lymphocytic leukemia (CLL), a blood-borne malignancy characterized by the accumulation of large quantities of CD19+/CD5+ B cancer
+
+1CRCT, Universite´ de Toulouse, Inserm, CNRS, Universite´ Toulouse III-Paul Sabatier, Centre de Recherches en Cance´ rologie de Toulouse, Toulouse, France
+2Barcelona Supercomputing Center, Carrer de Jordi Girona, 29, 31, 08034 Barcelona, Spain
+3Service d’He´ matologie, Institut Universitaire du Cancer de ToulouseOncopole, 31330 Toulouse, France
+4Lead contact
+*Correspondence: vera.pancaldi@inserm.fr
+https://doi.org/10.1016/j.isci. 2023.106897
+
+iScience 26, 106897, June 16, 2023 ª 2023 The Authors. 1 This is an open access article under the CC BY-NC-ND license (http://creativecommons.org/licenses/by-nc-nd/4.0/).
+
+ll
+OPEN ACCESS
+cells (hereafter, CLL cells). These cells can be encountered in the bloodstream but also in lymphoid organs (bone marrow, spleen, and lymph nodes), forming proliferating centers in which they accumulate at high densities, promoting disease progression.12–15 CLL cells are unable to proliferate on their own and need to migrate to proliferation centers where they encounter a supportive TME comprising T cells, stromal cells, and TAMs, which are called nurse-like cells (NLCs) in this pathology.16–18 It has been widely reported that NLCs are crucial in rescuing CLL cells from spontaneous apoptosis and are important in attracting them to the proliferation centers.19–22 While therapies for CLL patients have mostly been targeting the cancer cells, it is increasingly apparent that many drugs altering the TME and controlling these complex interactions can beneﬁt patients.
+Similarly to cancer cells in solid tumors, CLL cells are able to induce the differentiation of monocytes into NLCs through direct contact and cytokine production.23,24 This favors the establishment of a pro-tumoral environment, protecting the leukemic cells from spontaneous apoptosis, and often leads to therapy resistance.25 One of the limitations in the study of TAMs is the difﬁculty in identifying them in bulk tumor samples, due to their close similarity with other macrophages that are also present in the TME. However, although NLCs and M2-type macrophages display a similar proﬁle in the CLL microenvironment,26 we showed that some distinctions can be highlighted, such as high expression of the RAGE membrane receptor, the HIF1a and VEGF/EGF transcription factors in NLCs.27 It has also been reported that NLCs express high levels of stromal-derived factor 1-a (SDF1a), a potent chemoattractant for CLL cells inducing their migration and pseudo-emperipolesis, corresponding to the crawling of entire CLL cells under macrophages without being internalized.28 Besides the release of soluble factors, NLCs can also promote CLL cell survival by direct contact.29,30 Based on these lines of molecular evidence, we derived general rules of interaction between cancer cells and monocytes to explore the mechanisms of cell-cell interactions that lead to the formation of NLCs. Importantly, the formation of NLCs can be observed and studied with a biologically relevant in vitro system in which patient-derived peripheral blood mononuclear cells (PBMCs) can be cultured for up to 13 days. PBMCs are usually composed of 1–3% monocytes and >95% CLL cells, depending on the patient and disease stage. Heterologous in vitro co-cultures of healthy monocytes and patient-derived CLL cells can also be used to produce NLCs in the absence of any other cell types. These two systems constitute a great resource to identify the processes that take place during the differentiation of monocytes into macrophages and their polarization into NLCs, like cell adhesion, phagocytosis performed by macrophages and NLCs, and the accumulation of CLL cells around NLCs. Moreover, controllable settings in this experiment allow a detailed investigation of the conditions that are necessary and sufﬁcient for NLC production, and the generated data can be used to propose computational models of this process and ﬁt their parameters.
+Agent-based models (ABMs) represent a discrete modeling approach that enables the simulation of the dynamics of populations of individuals in an environment. In principle, ABMs describe the interactions of decentralized agents which can be grouped into classes deﬁned by their own characteristics and behavioral rules in space and time. This structure enables us to study emergent global behaviors at the population level resulting from properties of individual cells and their interactions.31–33 Importantly, the deterministic or stochastic dynamics are spatiotemporal, enabling the identiﬁcation of spatial patterns of individuals in time. ABMs have been widely used to simulate the dynamics of diverse immune34–36 and cancer cells populations.37–39 Speciﬁcally, models have investigated properties of tumor morphology,40,41 adaptation of cancer cells in the TME,42 mutations and phenotype diversity,43 the role of the extracellular matrix,44,45 and the effect of drugs and nutrition on tumor survival and proliferation.46–48 Recent works focusing more speciﬁcally on macrophages in the TME of solid tumors have mostly exploited ordinary differential equation approaches.49–53 Some ABMs have also been developed to describe the molecular mechanisms controlling macrophage polarization, but they do not include cellular interactions with cancer cells.54 Here, we present an ABM implemented in Netlogo55,56 aiming to reproduce monocyte differentiation into macrophages and polarization into NLCs upon contact with CLL cells.
+RESULTS NLC formation in vitro In order to observe the formation of NLCs in vitro, autologous cultures from 9 CLL patients’ PBMCs were monitored for 13 days Figure 1A. Daily observation allowed us to see the outgrowth of big, adherent macrophages, whose phenotype was further assessed by ﬂow cytometry (Figure S1). An example of visualization of NLCs by ﬂuorescence microscopy is shown in Figure 1B. CLL cell survival over time was monitored through measurements of the cell concentration and viability Figure 1C. CLL cell viability represents the proportion of living cells within the cancer cell population, whereas CLL cell concentration is the
+2 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+iScience
+Article
+
+A
+
+B
+
+Purified PBMC from CLL patient
+
+Blood from
+
+PBMC
+
+CLL patient isolation
+
+Buffy coat from PBMC healthy donor isolation
+
+B cell purification from CLL patient PBMC (negative selection)
+
+Autologous culture PBMC from CLL patient
+
+Monocyte purification from healthy donor PBMC (CD14+, positive selection)
+
+Heterologous co-culture B cells from CLL patient + monocytes from healthy donor
+
+B-CLL viability and concentration monitoring over 13 days
+B-CLL viability and concentration monitoring at day 9
+
+C
+
+D
+
+I
+
+II
+
+III
+
+IV
+
+ll
+OPEN ACCESS
+
+100μm
+
+50μm
+
+100μm
+
+50μm
+
+Figure 1. Experimental setups and datasets from in vitro PBMC cultures from CLL patients (A) Experimental set-up. Autologous and heterologous co-cultures of CLL cells and monocytes leading to NLC formation. In autologous cultures, Peripheral Blood Mononuclear Cells (PBMC) were isolated from CLL patients’ blood samples and cultured in vitro for 13 days. The cell concentration and viability of CLL cells was monitored by hemocytometer and ﬂow cytometry AnnexinV/7AAD staining, respectively. (B) Visualization of NLCs at 10 days of in vitro culture from two different patients in bright-ﬁeld and immunoﬂuorescence microscopy (NLC: green staining; CLL cells: red staining). (C) Time course datasets produced from the PBMC autologous cultures from 9 patients. CLL cell survival was monitored by viability assay and concentration measurements. The black curve corresponds to the mean value averaged over the available data. The shaded area corresponds to the 95% conﬁdence interval. The complete dataset showing patients variability is available in Supplementary Material (Figure S2). Time points at which data was not available for at least 4 patients were removed from downstream analysis (Day 4, 5, 11, and 12). (D) Heterologous co-cultures. Monocytes from healthy donors and B cells from CLL patients were co-cultured to assess the relationship between the initial density of monocytes in the culture and the level of survival of CLL cells after 9 days. The x axis displays different monocytes initial proportions (not to scale for clarity). Measurements were performed on co-cultures of B cells from 5 CLL patients and monocytes from 2 healthy donors. Boxplots show the interquartile interval (25–75%) and the median of the measurements for each initial density of monocytes. Whiskers extend to the furthest datapoint within the 1.5x interquartile range and more extreme points are marked as outliers. The complete data showing inter-patient and inter-donor variability is available in Supplementary Material (Figure S3).
+percentage of remaining cells compared to their initial number at seeding. Based on the changes in maturating NLC morphology, the expression of myeloid markers on their surface (CD11c, CD14, CD16, CD163, and CD206), and considering the overall survival state of CLL cells, we have distinguished 4 stages of the culture, allowing us to infer individual behaviors in the ABM design.
+iScience 26, 106897, June 16, 2023 3
+
+ll
+OPEN ACCESS
+ Phase I (Day0–Day2). The initial state of the culture is characterized by the presence of approximately 4.5% apoptotic CLL cells (on average over the 9 patients) as a result of the initial lack of pro-survival agents and post-isolation stress. Monocytes attach to the plastic of the culture dish and start differentiation into macrophages. Based on the CLL cell countings, the phagocytosis activity of the differentiating monocytes is low, resulting in a decrease in the overall CLL cell viability.
+ Phase II (Day2–Day6). Maturation of macrophages and their further polarization into NLCs occurs. Phagocytosis of the dead and apoptotic CLL cells intensiﬁes (efferocytosis), leading to an increase in global CLL cell viability and decrease in cell concentration. The speciﬁc phenotype of macrophages is not fully attributed at this stage of the culture, as these cells are still undergoing a differentiation process and could potentially belong to various subsets within the M1 to M2 continuum.
+ Phase III (Day6–Day9). Macrophages and NLCs reach full maturation. We observe a tendency for CLL cells to accumulate around NLCs (Figure 1B) as a result of chemoattraction.21,57 There is no clear up- or down-ward trend in CLL cell viability and concentration.
+ Phase IV (Day9–Day13). The culture enters the steady state phase. CLL cell viability remains around 80% and cell concentration reaches 60% of the initial concentration.
+Importantly, CLL cell division was not implemented in this in vitro model, as CLL cells are known to proliferate only in the speciﬁc conditions found for example in lymph nodes, whereas they become quiescent in peripheral blood.58,59
+Additionally, to study the potential effect of the initial proportion of monocytes in CLL cell survival, heterologous co-culture experiments were performed by mixing CLL cells from patients together with varying proportions of healthy monocytes, to produce cell viability and concentration readouts on Day 9 of the co-culture Figure 1D. We have observed that CLL cell survival at the beginning of the steady state phase (Day 9) could be dependent on the monocytes’ initial proportion. Of note, CLL patients’ blood sample quantities and their insufﬁcient monocyte counts did not allow us to perform this experiment in an autologous setting with B cells and monocytes from the same patient.
+An ABM of NLC formation The CLL cell survival dynamics observed in vitro can be described as the evolution of a system composed of two main cell populations (Figure 2A): cancer cells (CLL cells) and myeloid cells (monocytes, macrophages, and NLCs). In our model, cancer cells can be found in 3 states, depending on their life status: (i) NeedSignal (red arrow), when they are still above the apoptosis threshold and are attracted to NLCs, (ii) Apoptotic (yellow arrow), an irreversible state in which the cells will continue to move and eventually die, and (iii) Dead (gray arrow), when the cells have reached the death threshold and will remain immobile. Myeloid cells can be found under 3 states as well, corresponding to their differentiation and polarization state: (i) Monocyte, (ii) Macrophage, or (iii) NLC, characterized by speciﬁc properties and spatiotemporal behaviors including movement, phagocytosis (efferocytosis) or cell-cell interactions (Figure 2B). The ABM of the co-culture of monocytes with CLL cells was implemented in NetLogo,55,56 in which space and time are discrete. Based on the experimental observation that macrophages and CLL cells concentrate at the bottom of the culture dish, the model was built in 2D, mimicking a projection of a cylindrical plate. Space is thus represented by a 2D lattice, where each cell occupies one spatial unit called ‘‘patch’’ of the size of a CLL cell ($ 5m m). We made the simpliﬁcation that cancer cells and myeloid cells occupy the same surface. There can only be one cell per patch and cells can move only on surrounding empty patches, according to their class and their corresponding mobility parameters. The model time step is 1 h. The simulation duration was set to 13 days, corresponding to the experimental time-course data.
+From the dynamics shown in Figure 1C, microscopy observations (Figure 1B) and ﬂow cytometry data on the evolution of the NLC phenotype (Figure S1), we deduced several key processes that might determine the cells’ interactions and state transitions. These include the chemoattraction of CLL cells to NLCs, a progressive adherence process of monocytes to the culture dish, corresponding to the monocyte-to-macrophage differentiation in the model, the appearance of the ﬁrst NLCs around Day 4, and the implementation of different levels of phagocytosis efﬁciencies depending on the myeloid class (Monocyte, Macrophage, and NLC). Importantly, although we chose not to model subcellular molecular processes, various deterministic and non-deterministic phenomena lead to agent behaviors and class updates. Brieﬂy, at the beginning
+4 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+iScience
+Article
+A
+Leukemic B cells
+
+ll
+OPEN ACCESS
+
+Myeloid immune cells
+
+B
+cell state transition
+
+activation inhibition phagocytosis killing
+
+NeedSignal Apoptotic Dead
+
+Monocyte Macrophage NLC
+
+macroφeff macrosd
+
+mono Monocyte
+
+sd
+
+monodNi(f0f ,σ)
+
+monoφeff
+
+monodiff threshold
+
+macroNnl(cμ-,pσo) l
+
+macro Macrophage
+
+keff
+
+nlcthreshold layersnlc
+
+nnssmsdp
+
+apothreshoaldpomp
+
+deaththreshold
+
+Need
+ns Signal life-init Γ(α,β)
+
+Apoptotic
+
+Dead
+
+anti-apoboost
+
+NLC
+nlcsd nlcφeff
+
+Figure 2. ABM representations (A) Netlogo simulation of 5000 cells. Cancer cells are depicted as small arrows (red, yellow or gray for NeedSignal, Apoptotic or Dead state, respectively) and myeloid cells are depicted as pentagons (blue, orange or green for Monocyte, Macrophage or NLC, respectively). (B) Schematic diagram of the agents’ states and behaviors. Parameters optimized through the genetic algorithm are indicated next to their corresponding cellular processes, represented by arrows.
+of the simulation, CLL cells and monocytes are instantiated in space randomly, with their class-speciﬁc property (life expectancy and differentiation time required for the monocyte-to-macrophage differentiation, respectively) set to values from characteristic distributions (G (x, nslGifae À init, nslGifbe À init) and N(0, monodNisff), respectively). Monocytes will differentiate (gain of 1 unit at each time step) and will convert into Macrophages after reaching the differentiation threshold (monodthifrfeshold). Cancer cells will decrease their life expectancy in a progressive manner (loss of 1 unit at each time step). When cancer cells reach the apoptosis threshold (apothreshold) and later the death threshold (deaththreshold), they will update their class from NeedSignal to Apoptotic, and from Apoptotic to Dead, respectively. Importantly, myeloid cells can phagocytose Apoptotic and Dead cancer cells with a characteristic efﬁcacy, which depends on several class-speciﬁc parameters (phagocytosis efﬁciency, sensing distance, and the movement probability of apoptotic cells), allowing efferocytosis, which corresponds to the clearance of apoptotic and dead cells from the culture environment. Therefore, Apoptotic and Dead cancer cells are only removed from the simulation after being phagocytosed by the myeloid cells. Besides phagocytosis, since certain macrophages in the M1-M2 spectrum could potentially kill the cancer cells,60 we implemented a killing efﬁciency for the Macrophage class so that they are able to actively kill cancer cells with a low efﬁciency (0–5%). After spending sufﬁcient time in contact with cancer cells (nlcthreshold), Macrophages will polarize into NLCs, representing a shift in the phenotype of myeloid cells from the Macrophage class to NLC class. NLCs secrete anti-apoptotic signals which will provide protective effects to the cancer cells, allowing them to ﬁght apoptosis and survive longer through a life extension period (anti À apoboost). This can be seen as supplemental hours for the cancer cells to remain alive, before entering the Apoptotic state.
+A complete description of the different cell classes and rules is available in the STAR Methods section and as UML class diagrams in Figure S4. The model features 19 parameters, including 5 accounting for spatial properties, that were optimized through parameter exploration (Table S1). We highlight that, due to our general approach to model cellular interactions, the parameter values should be taken more qualitatively than quantitatively, representing the different mechanisms at play at a more abstract level.
+iScience 26, 106897, June 16, 2023 5
+
+ll
+OPEN ACCESS
+
+A
+START
+
+Generate random initial population
+
+Assign fitness based on a
+bi-objective function for each individual in the population
+
+Selection of parents based on
+their fitness
+
+Crossover and
+mutation
+
+iScience
+Article
+
+Generate next population
+
+Convergence? Maximum
+generations?
+
+YES END
+
+NO
+
+B
+
+C
+
+knee-point best-via best-conc
+
+best viability fitness parameter set
+
+apomp nsmp layersnlc anti-apoboost monoφeff nlcφeff macroφeff macrokeff nssd monosd
+
+80% 90% 2 patches 244 hours 25% 4% 92% 0% 3 patches 2 patches
+
+90%
+
+80%
+
+80%
+
+70%
+
+3 patches 3 patches
+
+173 hours 173 hours
+
+75%
+
+32%
+
+81%
+
+4%
+
+37%
+
+98%
+
+0%
+
+0%
+
+3 patches 3 patches
+
+2 patches 3 patches
+
+knee-point parameter set
+
+best concentration fitness parameter set
+
+nlcsd macrosd nlcthreshold macronNlμc-pol
+macronNlσc-pol
+
+1 patch 1 patch 1 patch 2 patches 1 patch 1 patch 99 hours 118 hours 104 hours 63 hours 67 hours 67 hours 4 hours 38 hours 4 hours
+
+monodiff threshold
+monodNiσff ns life-init
+Γα
+
+49 hours 6 hours 0.3188
+
+70 hours 48 hours 6 hours 6 hours 0.2027 0.3584
+
+ns life-init Γβ
+
+2120
+
+2422
+
+2120
+
+Figure 3. Overview of strategy and results of the parameter exploration (A) Schematic diagram of the biobjective genetic algorithm. Flow chart of the NSGA-II algorithm procedure. The algorithm parameters and procedure details are described in the STAR Methods section. (B) Pareto front of the biobjective optimization. The NSGA-II genetic algorithm evaluates each explored set of parameters according to 2 objective functions corresponding to CLL cell viability and concentration (10 time points, least squares method), along 200000 generations. The Pareto front, depicted in red, contains 98 non-dominated solutions. The knee-point parameter set is in a cyan box and the parameter sets performing best on viability and concentration dynamics are in magenta boxes. (C) Representative parameter sets. The parameters listed here correspond to the knee-point parameter set, and to the parameter sets ﬁtting best viability and concentration dynamics.
+
+Parameter space exploration Based on the two-dimensional ABM of monocyte-to-NLC differentiation in the presence of CLL cells described in the previous section, we performed multiple simulations, limiting the parameters to values able to broadly reproduce the experimentally observed dynamics shown in Figure 1C. This empirical approach was used to estimate the ranges to be systematically explored for each parameter (Table S1). These include for example the parameters corresponding to the heterogeneous process of differentiation of monocytes into macrophages (monodthifrfeshold, monodNisff) set at the beginning of the co-culture. Parameters monodthifrfeshold and monodNisff were tested empirically with ﬁxed values between 48 h and 72 h, and between 0 h and 48 h, respectively, since monocytes were observed to adhere to the plate heterogeneously from Day 0 to Day 3. Parameters corresponding to the conversion of macrophages into NLCs (N(macronNlmc À pol, macronNlsc À pol)) were also chosen from ranges allowing the NLCs to start appearing around Day 4 and terminating their polarization around Day 8, as observed in the Fluorescence Assisted Cell Sorting (FACS) data (Figure S1). To determine the exact parameter values able to reproduce the CLL cell survival dynamics observed experimentally in the PBMC autologous cultures (Figure 1C), we then performed an automated parameter search employing the non-dominated sorting genetic algorithm-II (NSGA-II,61,62 Figure 3A), implemented in openMOLE.63 This procedure systematically generates populations of parameter sets and evolves the candidate solutions toward higher values of two objective ﬁtness functions, minimizing the
+6 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+ll
+OPEN ACCESS
+
+A
+
+ns life-init Γα
+
+ns life-init Γβ
+
+nsmp
+
+nssd
+
+apomp
+
+monoφeff
+
+monodNifσf
+
+monodiff threshold
+
+monosd
+
+macroφeff
+
+macrokeff
+
+macronNlμc-pol
+
+B
+ns life-init Γα
+macroφeff
+
+fitnessVia
+0.88 0.41
+
+macrokeff anti-apoboost
+nlcφeff ns life-init
+Γβ
+macrosd nssd
+macronNlσc-pol nsmp
+
+0.33 0.32 0.28 0.28 0.27 0.23 0.21 0.19
+
+nlcthreshold
+
+0.16
+
+monosd
+
+0.15
+
+layersnlc 0.12
+
+monodiff Nσ
+monoφeff
+
+0.11 0.06
+
+apomp 0.06
+
+nlcsd 0.04
+
+macronlc-pol Nμ
+monodiff threshold
+
+0.02
+0
+
+0.00 0.25 0.50 0.75
+Correlation Coefficient
+
+macronNlσc-pol
+
+macrosd
+
+layersnlc
+
+nlcsd
+
+anti-apoboost
+
+nlcφeff nlcthreshold
+
+C fitnessConc
+
+ns life-init Γα
+nlcthreshold
+macronlc-pol Nμ
+monodiff threshold nlcφeff
+
+0.72 0.5 0.47 0.41 0.4
+
+monoφeff
+
+0.38
+
+nlcsd macronlc-pol
+Nσ
+layersnlc
+
+0.37 0.35 0.31
+
+nssd
+
+0.3
+
+apomp monosd ns life-init
+Γβ
+anti-apoboost
+
+0.21 0.17 0.15 0.12
+
+macroφeff
+
+0.1
+
+macrokeff 0.06
+
+nsmp 0.03
+
+monodiff 0.03 Nσ
+macrosd 0.02
+
+0.0 0.2 0.4 0.6
+Correlation Coefficient
+
+Figure 4. Parameter distributions and correlations (A) Parameter distribution of the searched space and of the Pareto front solutions. The violin plots show the distribution of parameter values in the entire search space after parameter exploration throughout 200000 generations. The swarm plots represent the 98 non-dominated solutions of the Pareto front. The cyan dot in each plot corresponds to the corresponding parameter value in the knee-point set.
+
+iScience 26, 106897, June 16, 2023 7
+
+ll
+OPEN ACCESS
+
+iScience
+Article
+
+Figure 4. Continued (B) Parameter correlations with ﬁtness on viability. The parameters are ranked based on the absolute value of their correlation coefﬁcient with ﬁtness on viability. (C) Parameter correlations with ﬁtness on concentration. The parameters are ranked based on the absolute value of their correlation coefﬁcient with ﬁtness on concentration.
+difference between the simulated CLL cell viability and concentration and the corresponding experimental time-course data shown in Figure 1C. Simulations were run on 1000 cells using averaged monocyte initial proportion and averaged apoptotic cell initial proportion over the 9 patients (1.28% and 4.55%, respectively).
+A total of 98 parameter sets were obtained as optimal solutions from the Pareto front, whose convex shape indicates the anti-correlated nature of the two ﬁtnesses (Figure 3B). Evolution of the ﬁtness values on cell viability and concentration dynamics showed that the NSGA-II algorithm converged in early generations ($ 500), ensuring that after 200000 generations the parameter space was sufﬁciently explored to provide conﬁdence in the resulting optimized parameters (Figure S5). Generally, in multi-objective optimization methods, choosing a speciﬁc set of parameters from the optimization results requires both biological and computational reasoning. In our case, we particularly focused on three parameter sets, maximizing ﬁtness on viability, concentration, and the knee-point on the Pareto front (Figures 3B and 3C), deﬁned as the point on the Pareto front that optimizes both constraints equally well and which usually represents the best trade-off. In addition, the distribution of each parameter value within solutions on the Pareto front (Figure 4A) allows us to check for consistency between the result of the optimization algorithm and our biological observations. For example, monocyte phagocytosis efﬁciency (mono4eff) is skewed toward low values while macrophage phagocytosis efﬁciency (macro4eff) is skewed toward higher values. This is consistent with the experimental observation that phagocytosis in the ﬁrst days (Day 0–2) is negligible since dead cells accumulate and viability decreases. Indeed, in the ﬁrst days, monocytes are non-adherent and, it is only when they adhere to the plate and differentiate into functional macrophages that we observe dead cells getting cleared from the population, with viability increasing again around Day 3–4 of the culture. It has been also reported that adherence is required to prime monocytes for their phagocytic functions.64–66 Furthermore, high values of anti À apoboost are selected, indicating the importance of the protective role of NLCs for CLL cells in the observed dynamics. Pearson correlations between the parameters and the two ﬁtness functions shed light on the most important parameters deﬁning the model ﬁt (Figures 4B and 4C). They suggest a strong role for the CLL cells’ life expectancy heterogeneity (i.e. parameters of the Gamma distribution of the cancer cells’ life property value at initialization) and of the macrophages’ phagocytosis efﬁciency in obtaining a higher ﬁtness for viability (Figure 4B). Other parameters involved in monocyte-to-macrophage differentiation timing (monodthifrfeshold, monodNisff), macrophage-toNLC polarization (nlcthreshold, macronNlmc À pol), or NLC phagocytosis efﬁciency (nlc4eff) are the most important to ﬁt the concentration readout (Figure 4C). This suggests that different mechanisms might be at play in reproducing the experimentally observed dynamics. Additionally, we cannot exclude that other parameter sets from the Pareto front reach the expected outcomes on viability and concentration equally well, due to potential coupling between some parameters (Figure S6). A full investigation of the implications of these parameter correlations in the model would require further experimental validation and is beyond the scope of this work.
+Model performance in recapitulating averaged patient CLL cell survival dynamics
+We evaluated the 3 Pareto front’s representative parameter sets against experimental data from CLL cell survival in PBMC autologous cultures averaged from 9 different patients and observed that the knee-point set performed the best as measured by the normalized root mean squared errors (NRMSE) and R2 values (knee-point set: NRMSEvia = 0.2, R2via = 0.5 and NRMSEconc = 0.13, R2conc = 0.85; best-viability set: NRMSEvia = 0.16, R2via = 0.66 and NRMSEconc = 0.53, R2conc = -1.66; best-concentration set: NRMSEvia = 0.29, R2via = -0.07 and NRMSEconc = 0.13, R2conc = 0.84, Figures 5A–5C). For this reason, the knee-point set was chosen for further evaluation of the model performance and for predictive power. Two main input variables in the model are the initial concentrations of monocytes and CLL apoptotic cells in the culture. We, therefore, hypothesized that the initial monocyte and apoptotic cell concentration in our cultures could be factors that partially explain the broad differences and large dispersion of experimental measurements from different patients (Figures 1C, 1D, 5, S2, and S3). To investigate this, we, therefore, performed several simulations
+
+8 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+A
+
+knee-point set
+
+NRMSE_via = 0.2 R²_via = 0.5
+
+ll
+OPEN ACCESS
+
+B
+
+best-viability set
+
+NRMSE_via = 0.16 R²_via = 0.66
+
+NRMSE_conc = 0.13 R²_conc = 0.85
+
+C
+
+best-concentration set
+
+NRMSE_conc = 0.53 R²_conc = -1.66
+D
+
+NRMSE_via = 0.29 R²_via = -0.07
+
+NRMSE_via = 0.2 R²_via = 0.71
+
+NRMSE_conc = 0.13 R²_conc = 0.84
+
+NRMSE_conc = 0.29 R²_conc = 0.34
+
+Figure 5. Comparison of simulated and experimental results (A–C) Model ﬁtting on PBMC autologous cultures. 12 simulations were run with the knee-point parameter set (A), the parameter set maximizing the viability ﬁtness (B), the parameter set maximizing the concentration ﬁtness (C), and compared with the experimentally observed viability and concentration dynamics averaged over 9 patients. The initial monocyte and apoptotic cancer cell proportions for the simulations were set to the average monocyte and apoptotic cell proportions measured in the patient PBMCs (1.28% and 4.32%, respectively). Simulations are depicted in red and experimental data in black. The black curve corresponds to the mean value averaged over the available data. The shaded area corresponds to the 95% conﬁdence interval. (D) Model predictions on heterologous co-cultures with varying monocyte initial proportions. Simulations were run varying initial monocyte proportions (3 repetitions) for 9 days and are here compared to experimental observations in heterologous co-cultures with the corresponding initial conditions after 9 days
+
+iScience 26, 106897, June 16, 2023 9
+
+ll
+OPEN ACCESS
+
+iScience
+Article
+
+Figure 5. Continued (average over 10 experiments including 5 CLL patients and 2 healthy donors). Red dots correspond to the simulations and black dots and boxes correspond to the experimental data. Boxplots show the interquartile interval (25–75%) and the median of the measurements for each initial density of monocytes. Whiskers extend to the furthest datapoint within the 1.5x interquartile range and more extreme points are marked as outliers. Values of R2 approaching one and values of NRMSE close to zero indicate a good performance of the model.
+with varying initial proportions of monocytes and estimated the CLL cell viability and concentration at Day 9. We compared our predictions to experiments from heterologous co-cultures of healthy monocytes with patient CLL cells in which we could vary the initial (healthy) monocyte concentration at will (Figure 1D). The results in Figure 5D show that the model based on autologous culture datasets is able to predict viability and concentration values observed experimentally with changing initial monocyte proportion in a heterologous culture with reasonable accuracy on both viability and concentration readouts (NRMSEvia = 0.2, R2via = 0.71 and NRMSEconc = 0.29, R2conc = 0.34).
+We further tested whether we could ﬁt patient-speciﬁc dynamics by using patient-speciﬁc initial monocyte and initial apoptotic cell proportions as inputs to our model (Table S2). In this context, our predictions of CLL cell viability and concentration also partly matched the experimentally observed proﬁles (Figure S7).
+Parameter sensitivity analysis To better understand the inﬂuence of speciﬁc parameters on the overall CLL cell survival dynamics, we performed a sensitivity analysis using the one-factor-at-a-time method,67 with which each parameter value is varied while leaving the others at their optimized value extracted from the knee-point parameter set (Figure 6). As described previously, several parameters, like heterogeneity of the cancer cells’ life expectancy, phagocytosis efﬁciency, monocyte-to-macrophage differentiation timing, and macrophage-to-NLC polarization timing, affect the viability and concentration dynamics the most (absolute values of correlation coefﬁcients > 0.4, Figures 4B and 4C). We ﬁrst explored the importance of CLL cells’ inherent survival heterogeneity by varying the shape and rate parameters of the Gamma distribution used to initialize the life expectancy of each cancer cell (nslGifae À init, nslGifbe À init, Figure 6). The heterogeneity of macrophages’ initial state of polarization toward NLCs was also shown to inﬂuence the survival dynamics as displayed by the simulations using varying values for this parameter (macronNlmc À pol). We also investigated the effect of varying the timing of monocyte differentiation into macrophages (monodthifrfeshold) but did not observe any major impact on the dynamics, at least with the other parameters ﬁxed to their corresponding values from the knee-point parameter set. We then explored the importance of phagocytosis by performing simulations varying the characteristic phagocytosis efﬁciency of macrophages (macro4eff), highlighting the importance of this parameter in rescuing CLL cell viability. Finally, we evaluated the importance of the threshold that determines after how long a macrophage turns into NLC, ﬁnding that it also strongly impacts the readout dynamics (nlcthreshold). These particular parameters relate to speciﬁc mechanisms in the model that are potentially fundamental in reproducing the experimental behaviors. Of note, spatial parameters related to phagocytosis sensing distances (macrosd and nlcsd) were also found to considerably impact the system dynamics (Figure S8), further underscoring the importance of a ﬁnely tuned phagocytosis, its timing, and the different efﬁciencies across myeloid cell classes.
+Patient-speciﬁc models allow identiﬁcation of patients subgroups matching distinct macrophage proﬁles As described previously, the performance of our general model with the knee-point parameter set against patient-speciﬁc dynamics showed varying accuracy scores depending on the patients (Figure S7). Given the extreme variability between patients (Figures 1C and 1D), we decided to perform patient-speciﬁc parameter optimizations using the initial monocyte and initial apoptotic cell proportions speciﬁc to each patient, optimizing the ﬁt of simulation results to patient-speciﬁc experimental data. Knee-point parameter sets were retained for downstream analysis (Table S3) and we tested the performance of each of the 9 models against the corresponding patient Figure 7A. We observed overall improved ﬁtness accuracy scores compared to the ones obtained with the general model, as shown by the NRMSE scores and R2 scores (Table S4, averaged scores of NRMSEvia = 0.66 and R2via = -3.98 for the general model compared to averaged scores of NRMSEvia = 0.26 and R2via = 0.27 for the patient-speciﬁc models; averaged scores of NRMSEconc = 0.37 and R2conc = -0.68 for the general model compared to averaged scores
+
+10 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+ns life-init Γα
+
+ns life-init Γβ
+
+ll
+OPEN ACCESS
+monodiff threshold
+
+macronNlμc-pol
+
+macroφeff
+
+nlcthreshold
+
+Figure 6. Parameter sensitivity analysis The parameters were varied one at a time while keeping all other parameters constant to estimate their impact on the overall dynamics (4 simulation runs per value). Parameters which had the largest impact are displayed here (based on having absolute correlation coefﬁcient to ﬁtness on viability or on concentration above 0.4). A parameter sensitivity analysis on the remaining 13 parameters is shown in Figure S8. The black curve corresponds to the mean value averaged over the available experimental data. The shaded area corresponds to the 95% conﬁdence interval.
+NRMSEconc = 0.21 and R2conc = 0.44 for the patient-speciﬁc models). We also tried to predict behaviors in heterologous co-cultures with varying monocyte initial proportions for 3 patients for whom we had the corresponding data, obtaining relatively good ﬁtness scores (Figure 7B, Patient 3 (NRMSEvia = 0.66, R2via = À1.66, NRMSEconc = 0.24, R2conc = 0.58), Patient 4 (NRMSEvia = 0.22, R2via = 0.66, NRMSEconc = 0.29, R2conc = 0.49), Patient 6 (NRMSEvia = 0.29, R2via = 0.4, NRMSEconc = 0.16, R2conc = 0.77)). We are well aware, however, that heterologous co-cultures, with monocytes from healthy donors, behave differently compared to a fully autologous PBMC culture, limiting our chance of using an autologous-based model to predict heterologous dynamics.
+The knee-point parameter values for each patient were then used to perform unsupervised patient clustering, revealing 2 distinct classes Figure 8A. A principal component analysis was also performed showing a consistent separation between the two patient classes Figure 8B. Analyzing the ﬁrst principal component, which explains this separation of the two patient clusters Figure 8C, highlighted the importance of the following parameters in deﬁning the two classes: cell sensing distances (nlcsd, monosd), macrophage-to-NLC polarization timing properties (macronNlcmÀ pol), protective effects of the anti-apoptotic factors secreted by NLCs (anti À apoboost), apoptotic CLL cells movement probability (apomp), phagocytosis efﬁciency of Macrophage and NLC cells (macro4eff and nlc4eff). These results reveal the importance of the spatial aspects as well as phagocytosis and the protective effect of NLCs in determining the viability and concentration dynamics.
+We further compared the distributions of the parameter values from each group identiﬁed by the unsupervised clustering and principal component analysis (Figures 8A and 8B), highlighting some parameters that could be distinctive between the 2 classes (Figure 9). In particular, among the parameters which contribute the most in separating the clusters (Figure 8C), macronNlmc À pol, related to the polarization status toward NLC when a Monocyte turns into a Macrophage, is lower in patients from Class A than patients from Class B.
+iScience 26, 106897, June 16, 2023 11
+
+ll
+OPEN ACCESS
+A
+
+iScience
+Article
+
+B
+Figure 7. Evaluation of the patient-speciﬁc models (A) Model ﬁtting of patient-speciﬁc models on PBMC autologous cultures. On each panel, 12 simulations are shown with the corresponding patient-speciﬁc knee-point parameter set and compared with the experimentally observed viability and concentration dynamics. The initial monocyte proportion for the simulations was set to the corresponding monocyte proportion measured in each patient (Table S2). Simulations are depicted in red and experimental data in black. (B) Prediction performances of 3 patient-speciﬁc models on heterologous co-cultures with varying monocyte initial proportions. Simulations were run for varying initial monocyte proportions (3 repetitions) for 9 days and are here compared to experimental observations in heterologous co-cultures with the 12 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+ll
+OPEN ACCESS
+
+Figure 7. Continued corresponding initial conditions after 9 days. Red dots correspond to the simulations and black dots correspond to the experimental data. Values of R2 approaching one and values of NRMSE close to zero indicate a good performance of the model. For each patient, experiments were carried out with varying proportions of monocytes from 2 different healthy donors. However, due to low sample quantities from either the patient and/or the donor, not all monocyte proportions could be tested for all patients. The complete data showing inter-patient and inter-donor variability is available in Supplementary Material (Figure S3).
+Combined with a higher nlcthreshold, this suggests a slower polarization of macrophages into NLCs in Class A than in Class B patients. Additionally, the parameters nlcsd, monosd, apomp, nlc4eff, and macro4eff, are all higher in Class A than in Class B patients, suggesting a more efﬁcient overall phagocytosis activity which could induce a quicker clearance of dead and apoptotic cells in Class A patients. Finally, anti À apoboost is also higher in Class A, suggesting a better protection against apoptosis from NLCs in patients from this class.
+Interestingly, some of these ﬁndings correlate with patient classes identiﬁed experimentally, where patients with either low or high viability of CLL cells were identiﬁed.68 In this publication, we observed a higher capacity of NLCs to attract leukemic cells and perform phagocytosis in the case of high viability proﬁles, possibly corresponding to higher values of the layersnlc and nlc4eff parameters in Class A than in Class B patients (Figure 9). Thus, high-viability patient proﬁles might correspond to the Class A patients in this study. We also showed a rescue of CLL cell viability in low-viability proﬁles when treating the cells with IL-10, which is known to induce macrophage polarization toward M2-like macrophages. This ﬁnding is in agreement with the hypothesis that patients from Class A here produce a protective NLC class (M2-like), showing a higher CLL cell viability at the end of the co-culture (Figure 10), and displaying a higher Macrophage and NLC phagocytosis efﬁciency in our patient-speciﬁc models (Figure 9). The protective effect of the anti-apoptotic signals secreted by NLCs (anti À apoboost) was also found to be higher in Class A, supporting the fact that this class might correspond to patients producing protective NLCs, secreting more anti-apoptotic signals than the non-protective NLCs. In both Class A and Class B, we still observed a high heterogeneity across patients. More samples could allow us to identify subclasses with higher resolution and better explain this variability.
+In patients from Class B, the viability of CLL cells is not fully restored during the time course of the experiment (Figure 10) suggesting that the NLCs produced are dysfunctional. Interestingly, for two patients falling in this Class B, macrophages collected from the PBMC autologous culture on Day 8 had a more M1 rather than an M2 phenotype, supporting the classiﬁcation of these patients in the non-protective macrophages class (Patients 2 and 9, Table S5). On the other hand, two patients from class A had macrophages mainly of the M2 phenotype, supporting the classiﬁcation of these patients in the protective NLC class (Patients 5 and 8, Table S5). These ﬁndings are consistent with the identiﬁcation of a few CLL patients in whom CLL cells polarize macrophages into NLCs that are impaired in their protective effect on the cancer cells.68
+DISCUSSION Immunotherapies targeting the TME have proven to be extremely beneﬁcial in a subset of patients. However, the presence of TAMs in tumors can hinder the efﬁcacy of these treatments and lead to tumor progression by stimulating proliferation, angiogenesis, and metastasis. In this project, we aim at understanding how the pro-tumoral role of TAMs promotes the survival of cancer cells and identifying the cellular processes determining this phenomenon. Given the difﬁculty of studying cellular dynamics in tissues, we turned to an in vitro model of leukemia, in which we can closely follow the differentiation of TAMs from monocytes in the presence of cancer cells. Building on experimental measurements of cell counts and viability of cancer cells in cultures of blood from CLL patients, we implemented a two-dimensional ABM to simulate intercellular interactions in the spatial context of this in vitro culture. More speciﬁcally, we modeled the interactions between CLL cells and monocytes, and the resulting differentiation of monocytes into macrophages that protect cancer cells from spontaneous apoptosis (called NLCs in this pathology). Using our experimental observations of cancer cell survival dynamics in autologous PBMC cultures averaged from 9 patients to optimize the model parameters, we were able to reproduce biologically realistic dynamics. We further tested the predictive power of our model parameterized on averaged patient data in a heterologous experimental context, by simulating co-cultures of CLL cells with varying proportions of healthy monocytes, obtaining good accuracy between experimental and simulated CLL cell survival readouts on Day 9. These observations suggested that our general model could be made patient-speciﬁc
+
+iScience 26, 106897, June 16, 2023 13
+
+ll
+OPEN ACCESS
+A
+CLASS A
+
+iScience
+Article
+
+CLASS B
+
+apomp nsmp layersnlc anti-apoboost monoφeff nlcφeff macroφeff macrokeff nssd monosd nlcsd macrosd nlcthreshold macroNnlμc-pol macroNnlσc-pol monodiff
+threshold
+monodNiσff ns life-init
+Γα
+ns life-init Γβ
+
+2 1 0 −1 −2
+
+Patient 7 Patient 2 Patient 4 Patient 9 Patient 3 Patient 6 Patient 5 Patient 1 Patient 8
+
+B
+0.5
+
+Patient 3
+
+Patient 8
+
+Patient 2 Patient 7
+
+C Contribution of variables to Dim−1
+15
+
+Dim2 (19.7%) Contributions (%)
+
+0.0
+Patient 6
+
+−0.5
+
+Patient 5
+
+10
+
+Patient 4
+
+Patient 9
+
+5
+
+−1.0
+
+Patient 1
+
+−1.0
+
+−0.5
+
+0.0
+
+0.5
+
+1.0
+
+Dim1 (29.4%)
+
+0 nlc sdmonmoascdronlcaN-pμnolti-apo boosat po mpnlc mφeaff cromφoeffnodiffthmresahocldronlcN-pσol ns mp nslifeΓ-iβnit macro klaeffyersnnllcc threshomld acro sdns sdmonodiffNσnslife-Γinαitmono φeff
+
+Figure 8. Patient clusters (A) Unsupervised hierarchical patient clustering. Patients were clustered with the complete linkage clustering method based on their knee-point parameters sets. Parameter values were centered and scaled by row. Patient-speciﬁc parameter sets are available in detail in Table S3. (B) Principal Component Analysis. Patients are colored according to the class identiﬁed in the unsupervised hierarchical clustering shown in A. (C) Parameter contributions to the ﬁrst dimension of the principal component. The dashed line corresponds to the expected value if the contributions were uniform. Any parameter with a contribution above the reference line could be considered as important in contributing to the dimension.
+
+14 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+ns life-init Γα
+
+ns life-init Γβ
+
+ll
+OPEN ACCESS
+
+nsmp
+
+nssd
+
+apomp
+
+monoφeff
+
+monodNifσf
+
+monodiff threshold
+
+monosd
+
+macroφeff
+
+macrokeff
+
+macronNlμc-pol
+
+macronNlσc-pol
+
+macrosd
+
+nlcφeff
+
+anti-apoboost
+
+layersnlc
+
+nlcsd
+
+nlcthreshold
+
+Figure 9. Comparative knee-point parameter sets distributions within each patient class The knee-point parameter sets of patients from clusters A and B resulting from the unsupervised clustering shown on Figure 8A were integrated and depicted here in blue for Class A and orange for Class B. Boxplots show the interquartile interval (25–75%) and the median of the parameters’ values. Whiskers extend to the furthest datapoint within the 1.5x interquartile range and more extreme points are marked as outliers.
+using routinely measured variables, such as the proportion of monocytes in patient’s PBMCs. However, when using this input together with patient-speciﬁc information about the initial proportion of apoptotic cells after CLL cell isolation, we were unable to ﬁt each patient’s cancer cell survival-speciﬁc dynamics.
+iScience 26, 106897, June 16, 2023 15
+
+ll
+OPEN ACCESS
+Class A Protective NLCs High CLL cell viability
+
+apomp(A) > apomp(B) monosd(A) > monosd(B) macroφeff(A) > macroφeff(B) macronNlμc-pol(A) < macronNlμc-pol(B)
+nlcφeff(A) > nlcφeff(B) nlcsd(A) > nlcsd(B) anti-apoboost(A) > anti-apoboost(B)
+
+iScience
+Article
+Class B Non-protective NLCs Low CLL cell viability
+
+Figure 10. Unsupervised patient classiﬁcation reveals characteristic macrophage proﬁles. The black curve corresponds to the mean value averaged over the available data for each class. The shaded area corresponds to the 95% conﬁdence interval.
+We believe that some other patient-speciﬁc features need to be considered to obtain better predictions. The putative association between initial monocyte proportion in autologous cultures and CLL cell survival or patient outcome remains to be studied clinically, despite some evidence that monocyte count in CLL patients can be prognostic.69,70 Heterogeneity across patients is well known71 and the formation of NLCs might be extremely patient-speciﬁc in both time scales, numbers, and phenotypes of NLCs generated. We are aware that different dynamics could be at play in different patients, and we hoped that clinically measurable parameters, such as the initial monocyte concentration in the blood, could help us produce a generally useful model that can give speciﬁc predictions. However, this involves making strong assumptions about the fact that the same processes are active in different patients, which remains to be veriﬁed. Considering the extreme variability between patients, we then opted for an approach to identify patient-speciﬁc model parameters. As expected, this procedure allowed us to obtain a much better match with patient-speciﬁc experimental data. Furthermore, using unsupervised clustering methods on the patient-speciﬁc parameter values, we detected the existence of 2 distinct classes, which might correspond to protective and non-protective NLCs, as previously suggested experimentally.68 Additionally, we show that for a subset of patients for which experimental data is available, this unsupervised classiﬁcation is consistent with the experimental evidence (cellular markers measured after 8 days of PBMC autologous cultures), displaying a majority of M2 markers in the case of the protective macrophages (NLCs), and a majority of M1 markers in the case of the non-protective NLCs.
+We also analyzed the impact of the model’s parameters in ﬁtting the averaged experimental data and suggest a fundamental role of the heterogeneity of cancer cell life expectancy at initialization, which could be monitored in further studies by using mono-cultures of patient-derived CLL cells. Results on parameter correlation to the 2 ﬁtness functions showed an important role for phagocytosis to ensure the long-term survival of cancer cells in this in vitro CLL model. This result was also conﬁrmed by the differences in parameter distributions between the 2 patient classes corresponding to protective and non-protective NLCs. These include phagocytosis efﬁciencies from macrophages and NLCs, their sensing distances of dead and apoptotic cells, and the movement probability of apoptotic cells. These ﬁndings suggest that monitoring and potentially modulating phagocytosis could play a role in the control of TAM formation in vitro, in CLL lymph nodes, or even in solid tumors. This hypothesis would be in agreement with the fact that TAM levels of phagocytosis and efferocytosis affect their functionality and are key to controlling tumor progression.72,73 We hypothesize that one possible reason for the importance of phagocytosis in this system lies in the requirement for macrophages to process speciﬁc molecules from the cancer cells, such as antigens or metabolites, in order to induce their polarization into NLCs.72,74,75 Although levels of phagocytic activity in NLCs are still controversial,76,77 phagocytosis might rely on other cellular interactions with the cancer cells that would need to be described at the molecular level. Finally, the level of protective anti-apoptotic signals, that are known to be provided by NLCs to the cancer cells,24 appears to be also important to
+16 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+ll
+OPEN ACCESS
+
+differentiate between protective and non-protective NLCs, in agreement with the fact that protective NLCs secrete more anti-apoptotic signals than non-protective ones.
+Limitations of the study There are some important limitations of this study that we will list below. As far as the experiments are concerned, these in vitro cultures do not fully represent what is happening in the patient lymph nodes, where the density of CLL cells is as high or even higher than what we reproduce in the cultures, but potentially different cell populations other than cancer cells and monocyte/macrophages can be present in different proportions and within a different physical environment. For example, autologous cultures of PBMCs from CLL patients include small quantities of T cells, Natural Killer (NK) cells, and traces of other immune cells,78 whose interactions with NLCs and CLL cells could be important. The effect of these other cells could not be taken into account in the heterologous cultures that contain exclusively monocyte-derived cells from healthy donors and cancer cells from CLL patients, rendering the comparisons between the two experiments difﬁcult. The interactions between cells from different individuals could introduce a cross-reactive immunity, and we might be introducing effects due to the speciﬁc (epi)genetic characteristics of the monocytes from the healthy donors. Despite all these limitations, the fact that we can predict experimental data of heterologous co-cultures using the model optimized on autologous CLL patient cultures data suggests that the model can generalize and capture the overall behavior to some extent. Another important factor that is not taken into account in this study is the characteristic phenotype of the CLL cells, which are patient-speciﬁc and can be potentially affected by the CLL subtype (unmutated or mutated CLL, i.e., U-CLL, M-CLL79,80), related to their cell of origin, which can impact the aggressiveness of the disease. Moreover, we cannot exclude the effect of age or sex of the patient. Due to the reduced number of samples considered, we were unable to identify any clear association of clinical sample characteristics with the patient classes deﬁned by the time course proﬁles and represented by speciﬁc model parameters. The limited number of patient samples might also impact the relevance of the results we obtained through our clustering analyses, which normally require a large number of features and would be more relevant for a larger number of samples. Further work will be devoted to producing more data to conﬁrm the robustness of our ﬁndings on larger patient cohorts and to experimentally validate the phenotypic state of the CLL cells (living, apoptotic, and necrotic), and myeloid cells (macrophages and NLCs).
+The computational model also required some assumptions and simpliﬁcations which can constitute limitations. Anti-apoptotic signals were modeled to be secreted by NLCs but it would be interesting to include the ‘‘eat-me’’81 and ‘‘don’t-eat-me’’ signals (CD47)82,83 expressed by cancer cells once NLCs have formed. We also decided to model the system with a two-dimensional ABM, since the macrophages are adherent to the plate and most of the dynamics are determined by what happens on this surface. However, we observed that cancer cells can form aggregates in 3D, which might impact the overall dynamics and be indicative of their phenotypic state.84,85
+The initialization of these simulations is currently stochastic and does not take into account any information that could be extracted from high content imaging of the cultures. One of the main advantages of ABM is the ease with which spatial information can be integrated into the model construction and evaluation. We included several spatial parameters and behaviors to develop the model and deﬁne the different cell agent actions. However, we are aware that the use of spatial dynamics data to estimate the parameters or further analyze the model predictions is lacking. Indeed, in order to check if our model was correct in terms of spatial predictions, a requirement would be to image the cells in a robust way and quantify spatial aspects rigorously. However, the extremely high density of the cells, cultured in suspension, has made quantitative imaging particularly difﬁcult, preventing us from performing cell identiﬁcation through automated segmentation. We, therefore, focused on cell counts rather than spatial patterns to establish ﬁtness functions and evaluate our model simulations. One could argue that ordinary differential equation models would adequately address the research question tackled in this work. We chose to implement behaviors directly related to the cellular spatial organization (movement, phagocytosis, and cell identiﬁcation on the neighboring patches) leading to high individual and spatial heterogeneity, as often observed in real systems. These behaviors, which are critical to the system and inherently local, could not be averaged over time and space. We also believe that the dynamics represented in this study correspond to a nonlinear system, in which local variations can lead to signiﬁcant deviations in the emergent system behavior.86 For these reasons, we preferred the paradigms offered by ABMs rather than by other ODE models. Moreover, we introduced here a general framework that we ultimately want to apply to 3D culture experiments in which we will explore the possibilities to integrate spatial dynamics for parameter estimation, model evaluation, and analysis.
+
+iScience 26, 106897, June 16, 2023 17
+
+ll
+OPEN ACCESS
+Of note, in some patients, experimental measurements of concentration show an increase at the very end of the culture. We could tentatively speculate that this could be explained by a low level of proliferation in the culture. The environmental change from circulating blood to our static in vitro setup could potentially mimic a situation similar to lymph nodes, in which CLL cells are known to proliferate.58,59 Our PBMC co-culture system could allow the appearance of speciﬁc molecular signaling interactions and lead to activation of CLL cell proliferation. However, due to a lack of clear biological evidence in our experiments, CLL cell division was not expected and not implemented in our model. An additional factor that could explain this phenomenon is a small level of medium evaporation taking place during the time course, artiﬁcially provoking an increase in cell concentration with time. Care was taken in controlling this effect, but some experimental errors or biases cannot be excluded. These include for example limited sample sizes (n = 1 or n = 2), variations in the volume samplings or spatial heterogeneity in where the samples were taken, producing noise in the measured data and leading to a residual impact on the concentration curves.
+The sensitivity analysis identiﬁed the most relevant parameters for our general model outputs. However, it would be interesting to perform an additional structural identiﬁability analysis to help us determine if the parameter values that we obtained could be estimated uniquely from the available experimental data presented in this work. The distribution of the parameter sets belonging to the Pareto front shows that multiple parameter combinations could lead to comparable ﬁtness values on the objective functions. This suggests that our model might fall into the category of structurally unidentiﬁable models, in the sense that it makes similar predictions for more than one value of the parameters, and might depend only on a few stiff parameter combinations. This phenomenon is commonly observed in models in the systems biology literature.87 Undoubtedly, more experimental data will be needed to provide enough information to precisely identify the parameter values. In the case of the patient-speciﬁc models, we also extracted the parameter values from the knee-points parameter sets on each patient-speciﬁc Pareto front. These seem to cluster and properly match the patient classiﬁcation based on experimental data alone. However, a similar problem related to parametric uncertainty arises and we must admit that the conclusions and hypotheses based on this work remain tentative until parameter identiﬁability is fully explored or when data directly related to the biological processes we model (e.g., phagocytosis or apoptosis) are experimentally obtained.
+Our model being mostly qualitative, the interpretations we can draw from it can be limited. We were unable to deﬁne a single set of parameters that could be used for all the 9 patients considered, taking the initial monocyte concentration as an input variable. We can assume that some unexplored patient characteristics (constant or at the time of sampling) can lead to the production of either protective or non-protective NLCs and we were able to detect these two patient classes from parameter sets for our patient-speciﬁc models. Collecting data from more patients would allow us to robustly deﬁne these two classes more and might lead to biomarkers that identify patients that are likely to develop resistance to treatment due to the presence of protective NLCs in their lymph nodes.
+A possible extension of the usage of our model would be to include the effect of drug treatments, such as Bruton’s tyrosine kinase (BTK) inhibitors which are one of the main molecules used to treat CLL. In particular, ibrutinib is known to induce pro-apoptotic effects on CLL cells by impairing BCR and NF-kb signaling. This in turn modiﬁes among others the cancer cell mobility and adherence, limiting their attraction to the TME which includes NLCs, and ﬁnally leading to CLL cell apoptosis.20 Ibrutinib also indirectly modulates exchanges between CLL cells and NLCs by the inhibition of BTK expressed by NLCs. Additionally, Ibrutinib was shown to decrease the phagocytic potential of NLCs by downregulation of MAC1, CD11b, and CD18 expression.88 Clodronate is another promising molecule in treating CLL patients. It targets both monocytes and M2 macrophages and was shown to inhibit the formation of NLCs in vitro, leading to an increased mortality of cancer cells and to sensitization to ibrutinib in the case of resistant cells.89,90 Finally, IFN-g is able to repolarize NLCs into M1-like macrophages, leading to decreased CLL cell viability and increased antibody-dependent phagocytosis by NLCs.77 Our model could be used to partially simulate these phenomena at the cellular scale and to suggest new hypotheses with regards to the mechanisms at play in the resistance to BTK inhibitors. However, combining our approach with a molecular model of monocyte differentiation into NLCs27 and of CLL cell internal processes is crucial to predict the effect of speciﬁc treatments in detail and will be the subject of further work.
+Another obvious extension would involve simulating cellular dynamics in tissues, thus tackling the issue of TAM formation in solid tumors. We have recently developed tools to extract spatial information from tumor tissue samples either imaged via microscopy or characterized through single-cell spatial-omics
+18 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+iScience
+Article
+techniques,91 and we plan to establish a framework to use spatial data to initialize the ABM simulations in these more complex contexts. Finally, we realize the importance of internal regulatory processes that determine the agents’ behaviors and plan to extend this model by combining it with gene regulatory network models of phenotype transitions inside each cell (cancer cells, monocytes, and potentially other cells present in the TME in considerable proportions, such as lymphocytes or ﬁbroblasts). Over the years, a number of computational tools for implementing ABMs have been developed, including advanced methods for incorporating both inter- and intra-cellular interactions to simulate the global dynamics of multicellular systems.92,93 We believe that hybrid approaches coupling gene regulatory models with ABMs will be key in improving models’ accuracy. In this direction, we have developed a Boolean model of monocyte differentiation into NLC27 that we plan to integrate into the presented ABM using suitable tools in further work.
+To conclude, we hope that this model can be a starting point to provide simulations of dynamic cellular interactions in the TME, able to take into account patient-speciﬁc characteristics, and be useful to generate novel biological hypotheses.
+STAR+METHODS Detailed methods are provided in the online version of this paper and include the following:
+d KEY RESOURCES TABLE d RESOURCE AVAILABILITY
+B Lead contact B Materials availability B Data and code availability d METHOD DETAILS B Patient and blood samples B Cell culture B PBMC autologous cultures B Heterologous co-cultures B Flow cytometry B Agent based model B Model stochasticity B Parameter optimization d QUANTIFICATION AND STATISTICAL ANALYSIS
+SUPPLEMENTAL INFORMATION Supplemental information can be found online at https://doi.org/10.1016/j.isci.2023.106897.
+ACKNOWLEDGMENTS We wish to thank the patients and donors who donated blood samples to this study. This work was funded by the Fondation Toulouse Cancer Sante´ and by the Pierre Fabre Research Institute as part of the Chair of Bioinformatics in Oncology of the CRCT.
+AUTHOR CONTRIBUTIONS Conceptualization, N.V. and V.P.; Model design and computational framework, N.V. and H.A.; Computational methodology, N.V and H.A.; Simulations, N.V.; Data processing, N.V. and M.M.; Experimental data generation, M.D. and J.B.; Original draft preparation, N.V., M.M., and V.P.; Review and editing, M.P. and M.D.; Patient resources, L.Y.; Supervision of the work, M.P. and V.P.
+DECLARATION OF INTERESTS The authors declare no competing interests.
+Received: March 8, 2022 Revised: December 7, 2022 Accepted: May 12, 2023 Published: May 19, 2023
+
+ll
+OPEN ACCESS
+
+iScience 26, 106897, June 16, 2023 19
+
+ll
+OPEN ACCESS
+
+iScience
+Article
+
+REFERENCES 1. Sambi, M., Bagheri, L., and Szewczuk, M.R.
+(2019). Current challenges in cancer immunotherapy: multimodal approaches to improve efﬁcacy and patient response rates. J. Oncol. 2019, 4508794.
+2. Coussens, L.M., and Werb, Z. (2002). Inﬂammation and cancer. Nature 420, 860–867.
+3. Noy, R., and Pollard, J.W. (2014). Tumor-associated macrophages: from mechanisms to therapy. Immunity 41, 49–61.
+4. Epelman, S., Lavine, K.J., and Randolph, G.J. (2014). Origin and functions of tissue macrophages. Immunity 41, 21–35.
+5. Palma, A., Jarrah, A.S., Tieri, P., Cesareni, G., and Castiglione, F. (2018). Gene regulatory network modeling of macrophage differentiation corroborates the continuum hypothesis of polarization states. Front. Physiol. 9, 1659.
+6. Martinez, F.O., and Gordon, S. (2014). The m1 and m2 paradigm of macrophage activation: time for reassessment. F1000Prime Rep. 6, 13.
+7. Xue, J., Schmidt, S.V., Sander, J., Draffehn, A., Krebs, W., Quester, I., De Nardo, D., Gohel, T.D., Emde, M., Schmidleithner, L., et al. (2014). Transcriptome-based network analysis reveals a spectrum model of human macrophage activation. Immunity 40, 274–288.
+8. Aras, S., and Zaidi, M.R. (2017). Tameless traitors: macrophages in cancer progression and metastasis. Br. J. Cancer 117, 1583–1591.
+9. Mantovani, A., Allavena, P., and Sica, A. (2004). Tumour-associated macrophages as a prototypic type ii polarised phagocyte population: role in tumour progression. Eur. J. Cancer 40, 1660–1667.
+10. Bingle, L., Brown, N.J., and Lewis, C.E. (2002). The role of tumour-associated macrophages in tumour progression: implications for new anticancer therapies. J. Pathol. 196, 254–265.
+11. Cassetta, L., and Pollard, J.W. (2018). Targeting Macrophages: Therapeutic Approaches in Cancer.
+12. Ponzoni, M., Doglioni, C., and CaligarisCappio, F. (2011). Chronic lymphocytic leukemia: the pathologist’s view of lymph node microenvironment. Semin. Diagn. Pathol. 28, 161–166. Elsevier.
+13. Burger, J.A. (2011). Nurture versus nature: the microenvironment in chronic lymphocytic leukemia. In Hematology 2010, the American Society of Hematology Education Program Book, 2011, pp. 96–103.
+14. Hayden, R.E., Pratt, G., Roberts, C., Drayson, M.T., and Bunce, C.M. (2012). Treatment of chronic lymphocytic leukemia requires targeting of the protective lymph node environment with novel therapeutic approaches. Leuk. Lymphoma 53, 537–549.
+
+15. Herishanu, Y., Pe´ rez-Gala´ n, P., Liu, D., Biancotto, A., Pittaluga, S., Vire, B., Gibellini, F., Njuguna, N., Lee, E., Stennett, L., et al. (2011). The lymph node microenvironment promotes b-cell receptor signaling, nf-kb activation, and tumor proliferation in chronic lymphocytic leukemia. Blood 117, 563–574.
+16. Filip, A.A., Ciseł, B., Koczkodaj, D., Wa˛ sikSzczepanek, E., Piersiak, T., and Dmoszynska, A. (2013). Circulating microenvironment of cll: are nurse-like cells related to tumorassociated macrophages? Blood Cells Mol. Dis. 50, 263–270.
+17. Svanberg, R., Janum, S., Patten, P.E.M., Ramsay, A.G., and Niemann, C.U. (2021). Targeting the tumor microenvironment in chronic lymphocytic leukemia. Haematologica 106, 2312–2324.
+18. Fiorcari, S., Maffei, R., Atene, C.G., Potenza, L., Luppi, M., and Marasca, R. (2021). Nurselike cells and chronic lymphocytic leukemia b cells: a mutualistic crosstalk inside tissue microenvironments. Cells 10, 217.
+19. Filip, A.A., Ciseł, B., and Wa˛ sik-Szczepanek, E. (2015). Guilty bystanders: nurse-like cells as a model of microenvironmental support for leukemic lymphocytes. Clin. Exp. Med. 15, 73–83.
+20. Kipps, T.J., Stevenson, F.K., Wu, C.J., Croce, C.M., Packham, G., Wierda, W.G., O’brien, S., Gribben, J., and Rai, K. (2017). Chronic lymphocytic leukaemia. Nat. Rev. Dis. Primers 3, 16096.
+21. Burger, J.A., Tsukada, N., Burger, M., Zvaiﬂer, N.J., Dell’Aquila, M., and Kipps, T.J. (2000). Blood-derived nurse-like cells protect chronic lymphocytic leukemia b cells from spontaneous apoptosis through stromal cell– derived factor-1. Blood 96, 2655–2663.
+22. Calissano, C., Damle, R.N., Marsilio, S., Yan, X.-J., Yancopoulos, S., Hayes, G., Emson, C., Murphy, E.J., Hellerstein, M.K., Sison, C., et al. (2011). Intraclonal complexity in chronic lymphocytic leukemia: fractions enriched in recently born/divided and older/quiescent cells. Mol. Med. 17, 1374–1382.
+23. Jia, L., Clear, A., Liu, F.-T., Matthews, J., Uddin, N., McCarthy, A., Hoxha, E., Durance, C., Iqbal, S., and Gribben, J.G. (2014). Extracellular hmgb1 promotes differentiation of nurse-like cells in chronic lymphocytic leukemia. Blood 123, 1709–1719.
+24. Boissard, F., Laurent, C., Ramsay, A.G., Quillet-Mary, A., Fournie´ , J.J., Poupot, M., and Ysebaert, L. (2016). Nurse-like cells impact on disease progression in chronic lymphocytic leukemia. Blood Cancer J. 6, e381.
+25. Boissard, F., Fournie´ , J.J., Quillet-Mary, A., Ysebaert, L., and Poupot, M. (2015). Nurselike cells mediate ibrutinib resistance in chronic lymphocytic leukemia patients. Blood Cancer J. 5, e355.
+26. Ten Hacken, E., and Burger, J.A. (2016). Microenvironment interactions and b-cell receptor signaling in chronic lymphocytic
+
+leukemia: implications for disease pathogenesis and treatment. Biochim. Biophys. Acta 1863, 401–413.
+27. Marku, M., Verstraete, N., Raynal, F., MadridMencı´a, M., Domagala, M., Fournie´ , J.J., Ysebaert, L., Poupot, M., and Pancaldi, V. (2020). Insights on tam formation from a boolean model of macrophage polarization based on in vitro studies. Cancers 12, 3664.
+28. Burger, J.A., Burger, M., and Kipps, T.J. (1999). Chronic lymphocytic leukemia b cells express functional cxcr4 chemokine receptors that mediate spontaneous migration beneath bone marrow stromal cells. Blood 94, 3658–3667.
+29. Burger, J.A., and Kipps, T.J. (2002). Chemokine receptors and stromal cells in the homing and homeostasis of chronic lymphocytic leukemia b cells. Leuk. Lymphoma 43, 461–466.
+30. Boissard, F., Tosolini, M., Ligat, L., QuilletMary, A., Lopez, F., Fournie´ , J.J., Ysebaert, L., and Poupot, M. (2017). Nurse-like cells promote cll survival through lfa-3/cd2 interactions. Oncotarget 8, 52225–52236.
+31. Macal, C.M., and North, M.J. (2009). Agentbased modeling and simulation. In Proceedings of the 2009 Winter Simulation Conference (WSC) (IEEE), pp. 86–98.
+32. An, G., Mi, Q., Dutta-Moscato, J., and Vodovotz, Y. (2009). Agent-based models in translational systems biology. Wiley Interdiscip. Rev. Syst. Biol. Med. 1, 159–171.
+33. Hinkelmann, F., Murrugarra, D., Jarrah, A.S., and Laubenbacher, R. (2011). A mathematical framework for agent based models of complex biological networks. Bull. Math. Biol. 73, 1583–1602.
+34. Presbitero, A., Mancini, E., Castiglione, F., Krzhizhanovskaya, V.V., and Quax, R. (2019). Game of neutrophils: modeling the balance between apoptosis and necrosis. BMC Bioinf. 20, 475.
+35. Azarov, I., Peskov, K., Helmlinger, G., and Kosinsky, Y. (2019). Role of t cell-to-dendritic cell chemoattraction in t cell priming initiation in the lymph node: an agent-based modeling study. Front. Immunol. 10, 1289.
+36. Segovia-Juarez, J.L., Ganguli, S., and Kirschner, D. (2004). Identifying control mechanisms of granuloma formation during m. tuberculosis infection using an agentbased model. J. Theor. Biol. 231, 357–376.
+37. Wang, Z., Butner, J.D., Kerketta, R., Cristini, V., and Deisboeck, T.S. (2015). Simulating cancer growth with multiscale agent-based modeling. Semin. Cancer Biol. 30, 70–78.
+38. Bodine, E.N., Panoff, R.M., Voit, E.O., and Weisstein, A.E. (2020). Agent-based modeling and simulation in mathematics and biology education. Bull. Math. Biol. 82, 101–119.
+39. Yu, J.S., and Bagheri, N. (2020). Agent-based models predict emergent behavior of
+
+20 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+ll
+OPEN ACCESS
+
+heterogeneous cell populations in dynamic microenvironments. Front. Bioeng. Biotechnol. 8, 249.
+40. Norton, K.-A., Wininger, M., Bhanot, G., Ganesan, S., Barnard, N., and Shinbrot, T. (2010). A 2d mechanistic model of breast ductal carcinoma in situ (dcis) morphology and progression. J. Theor. Biol. 263, 393–406.
+41. Norton, K.-A., Wallace, T., Pandey, N.B., and Popel, A.S. (2017). An agent-based model of triple-negative breast cancer: the interplay between chemokine receptor ccr5 expression, cancer stem cells, and hypoxia. BMC Syst. Biol. 11, 68.
+42. Norton, K.-A., Gong, C., Jamalian, S., and Popel, A.S. (2019). Multiscale agent-based and hybrid modeling of the tumor immune microenvironment. Processes 7, 37.
+43. Voukantsis, D., Kahn, K., Hadley, M., Wilson, R., and Buffa, F.M. (2019). Modeling genotypes in their microenvironment to predict single-and multi-cellular behavior. GigaScience 8, giz010.
+44. D’Antonio, G., Macklin, P., and Preziosi, L. (2013). An agent-based model for elastoplastic mechanical interactions between cells, basement membrane and extracellular matrix. Math. Biosci. Eng. 10, 75–101.
+45. Nguyen Edalgo, Y., and Ford Versypt, A. (2018). Mathematical modeling of metastatic cancer migration through a remodeling extracellular matrix. Processes 6, 58.
+46. Aguilar, B., Gibbs, D.L., Reiss, D.J., McConnell, M., Danziger, S.A., Dervan, A., Trotter, M., Bassett, D., Hershberg, R., Ratushny, A.V., and Shmulevich, I. (2020). A generalizable data-driven multicellular model of pancreatic ductal adenocarcinoma. GigaScience 9, giaa075.
+47. Wang, Y., Rocha, H., Heiland, R., and Macklin, P. (2021). Simulation of drug-loaded nanoparticles on cancer treatment: an agentbased modelling approach. In 2021 Joint Mathematics Meetings (JMM) (AMS).
+48. Menezes, B., Cilliers, C., Wessler, T., Thurber, G.M., and Linderman, J.J. (2020). An agentbased systems pharmacology model of the antibody-drug conjugate kadcyla to predict efﬁcacy of different dosing regimens. AAPS J. 22, 29.
+49. Shariatpanahi, S.P., Shariatpanahi, S.P., Madjidzadeh, K., Hassan, M., and AbediValugerdi, M. (2018). Mathematical modeling of tumor-induced immunosuppression by myeloid-derived suppressor cells: implications for therapeutic targeting strategies. J. Theor. Biol. 442, 1–10.
+50. den Breems, N.Y., and Eftimie, R. (2016). The re-polarisation of m2 and m1 macrophages and its role on cancer outcomes. J. Theor. Biol. 390, 23–39.
+51. Eftimie, R., and Barelle, C. (2021). Mathematical investigation of innate immune responses to lung cancer: the role of macrophages with mixed phenotypes. J. Theor. Biol. 524, 110739.
+
+52. Suveges, S., Eftimie, R., and Trucu, D. (2022). Re-polarisation of macrophages within collective tumour cell migration: a multiscale moving boundary approach. Front. Appl. Math. Stat. 7, 799650.
+53. Eftimie, R., Gillard, J.J., and Cantrell, D.A. (2016). Mathematical models for immunology: current state of the art and future research directions. Bull. Math. Biol. 78, 2091–2134.
+54. Nickaeen, N., Ghaisari, J., Heiner, M., Moein, S., and Gheisari, Y. (2019). Agent-based modeling and bifurcation analysis reveal mechanisms of macrophage polarization and phenotype pattern distribution. Sci. Rep. 9, 12764.
+55. Sklar, E. (2007). A multi-agent simulation environment. Artif. Life 13, 303–311.
+56. Tisue, S., and Wilensky, U. (2004). Netlogo: A simple environment for modeling complexity. In International conference on complex systems, volume 21, pp. 16–21.
+57. Bu¨ rkle, A., Niedermeier, M., Schmitt-Gra¨ ff, A., Wierda, W.G., Keating, M.J., and Burger, J.A. (2007). Overexpression of the cxcr5 chemokine receptor, and its ligand, cxcl13 in b-cell chronic lymphocytic leukemia. Blood 110, 3316–3325.
+58. Schleiss, C., Ilias, W., Tahar, O., Gu¨ ler, Y., Miguet, L., Mayeur-Rousse, C., Mauvieux, L., Fornecker, L.-M., Toussaint, E., Herbrecht, R., et al. (2019). Bcr-associated factors driving chronic lymphocytic leukemia cells proliferation ex vivo. Sci. Rep. 9, 701–712.
+59. Haselager, M.V., Kater, A.P., and Eldering, E. (2020). Proliferative signals in chronic lymphocytic leukemia; what are we missing? Front. Oncol. 10, 592205.
+60. Italiani, P., and Boraschi, D. (2014). From monocytes to m1/m2 macrophages: phenotypical vs. functional differentiation. Front. Immunol. 5, 514.
+61. Deb, K. (2001). Evolutionary algorithms. In Multi-objective optimization using evolutionary algorithms (John Wiley & Sons, Ltd), pp. 81–170.
+62. Deb, K., Pratap, A., Agarwal, S., and Meyarivan, T. (2002). A fast and elitist multiobjective genetic algorithm: Nsga-ii. IEEE Trans. Evol. Comput. 6, 182–197.
+63. Reuillon, R., Leclaire, M., and ReyCoyrehourcq, S. (2013). A workﬂow engine speciﬁcally tailored for the distributed exploration of simulation models. Future Generat. Comput. Syst. 29, 1981–1990.
+64. Newman, S.L., and Tucci, M.A. (1990). Regulation of human monocyte/macrophage function by extracellular matrix. adherence of monocytes to collagen matrices enhances phagocytosis of opsonized bacteria by activation of complement receptors and enhancement of fc receptor function. J. Clin. Invest. 86, 703–714.
+65. Otto, N.A., Butler, J.M., Ramirez-Moral, I., van Weeghel, M., van Heijst, J.W.J., Scicluna, B.P., Houtkooper, R.H., de Vos, A.F., and van
+
+der Poll, T. (2021). Adherence affects monocyte innate immune function and metabolic reprogramming after lipopolysaccharide stimulation in vitro. J. Immunol. 206, 827–838.
+66. Uribe-Querol, E., and Rosales, C. (2020). Our current understanding of a universal biological process. Front. Immunol. 11, 1066.
+67. Daniel, C. (1973). One-at-a-time plans. J. Am. Stat. Assoc. 68, 353–360.
+68. Domagala, M., Ysebaert, L., Ligat, L., Lopez, F., Fournie´ , J.J., Laurent, C., and Poupot, M. (2021). Il-10 rescues cll survival through repolarization of inﬂammatory nurse-like cells. Cancers 14, 16.
+69. Friedman, D.R., Sibley, A.B., Owzar, K., Chaffee, K.G., Slager, S., Kay, N.E., Hanson, C.A., Ding, W., Shanafelt, T.D., Weinberg, J.B., and Wilcox, R.A. (2016). Relationship of blood monocytes with chronic lymphocytic leukemia aggressiveness and outcomes: a multi-institutional study. Am. J. Hematol. 91, 687–691.
+70. Yokus, O., Saglam, E.N., Goze, H., Sametoglu, F., and Serin, I. (2020). Prognostic role of lymphocyte/monocyte ratio in chronic lymphocytic leukemia. J. Hematol. 9, 116–122.
+71. Rodrı´guez-Vicente, A.E., Dı´az, M.G., and Herna´ ndez-Rivas, J.M. (2013). Chronic lymphocytic leukemia: a clinical and molecular heterogenous disease. Cancer Genet. 206, 49–62.
+72. Lecoultre, M., Dutoit, V., and Walker, P.R. (2020). Phagocytic function of tumorassociated macrophages as a key determinant of tumor progression control: a review. J. Immunother. Cancer 8, e001408.
+73. Zhou, X., Liu, X., and Huang, L. (2021). Macrophage-mediated tumor cell phagocytosis: opportunity for nanomedicine intervention. Adv. Funct. Mater. 31, 2006220.
+74. Biswas, S.K., and Mantovani, A. (2012). Orchestration of metabolism by macrophages. Cell Metab. 15, 432–437.
+75. Mehla, K., and Singh, P.K. (2019). Metabolic regulation of macrophage polarization in cancer. Trends Cancer 5, 822–834.
+76. Bhattacharya, N., Diener, S., Idler, I.S., Rauen, J., Ha¨ be, S., Busch, H., Habermann, A., Zenz, T., Do¨ hner, H., Stilgenbauer, S., and Mertens, D. (2011). Nurse-like cells show deregulated expression of genes involved in immunocompetence. Br. J. Haematol. 154, 349–356.
+77. Gautam, S., Fatehchand, K., Elavazhagan, S., Reader, B.F., Ren, L., Mo, X., Byrd, J.C., Tridandapani, S., and Butchar, J.P. (2016). Reprogramming nurse-like cells with interferon g to interrupt chronic lymphocytic leukemia cell survival. J. Biol. Chem. 291, 14356–14362.
+78. Cadot, S., Valle, C., Tosolini, M., Pont, F., Largeaud, L., Laurent, C., Fournie, J.J., Ysebaert, L., and Quillet-Mary, A. (2020). Longitudinal cite-seq proﬁling of chronic
+
+iScience 26, 106897, June 16, 2023 21
+
+ll
+OPEN ACCESS
+
+iScience
+Article
+
+lymphocytic leukemia during ibrutinib treatment: evolution of leukemic and immune cells at relapse. Biomark. Res. 8, 72.
+79. Knisbacher, B.A., Lin, Z., Hahn, C.K., Nadeu, F., Duran-Ferrer, M., Stevenson, K.E., Tausch, E., Delgado, J., Barbera-Mourelle, A., TaylorWeiner, A., et al. (2022). Molecular map of chronic lymphocytic leukemia and its impact on outcome. Nat. Genet. 54, 1664–1674.
+80. Robbe, P., Ridout, K.E., Vavoulis, D.V., Dre´ au, H., Kinnersley, B., Denny, N., Chubb, D., Appleby, N., Cutts, A., Cornish, A.J., et al. (2022). Whole-genome sequencing of chronic lymphocytic leukemia identiﬁes subgroups with distinct biological and clinical features. Nat. Genet. 54, 1675–1689.
+81. Ravichandran, K.S. (2011). Beginnings of a good apoptotic meal: the ﬁnd-me and eatme signaling pathways. Immunity 35, 445–455.
+82. Chao, M.P., Alizadeh, A.A., Tang, C., Myklebust, J.H., Varghese, B., Gill, S., Jan, M., Cha, A.C., Chan, C.K., Tan, B.T., et al. (2010). Anti-cd47 antibody synergizes with rituximab to promote phagocytosis and eradicate nonhodgkin lymphoma. Cell 142, 699–713.
+83. Takimoto, C.H., Chao, M.P., Gibbs, C., McCamish, M.A., Liu, J., Chen, J.Y., Majeti, R., and Weissman, I.L. (2019). The macrophage ‘do not eat me’signal, cd47, is a clinically validated cancer immunotherapy target. Ann. Oncol. 30, 486–489.
+84. Dezorella, N., Kay, S., Baron, S., Shapiro, M., Porat, Z., Deutsch, V., Herishanu, Y., and Katz, B.-Z. (2016). Measurement of lymphocyte aggregation by ﬂow cytometry–physiological implications in chronic lymphocytic leukemia. Cytometry B Clin. Cytometry 90, 257–266.
+
+85. Gravelle, P., Jean, C., Familiades, J., Decaup, E., Blanc, A., Bezombes-Cagnac, C., Laurent, C., Savina, A., Fournie´ , J.J., and Laurent, G. (2014). Cell growth in aggregates determines gene expression, proliferation, survival, chemoresistance, and sensitivity to immune effectors in follicular lymphoma. Am. J. Pathol. 184, 282–295.
+86. Van Dyke Parunak, H., Savit, R., and Riolo, R.L. (1998). Agent-based modeling vs. equationbased modeling: a case study and users’ guide. In Multi-Agent Systems and AgentBased Simulation: First International Workshop, MABS’98, Paris, France, July 4-6, 1998. Proceedings 1 (Springer), pp. 10–25.
+87. Gutenkunst, R.N., Waterfall, J.J., Casey, F.P., Brown, K.S., Myers, C.R., and Sethna, J.P. (2007). Universally sloppy parameter sensitivities in systems biology models. PLoS Comput. Biol. 3, 1871–1878.
+88. Fiorcari, S., Maffei, R., Audrito, V., Martinelli, S., Ten Hacken, E., Zucchini, P., Grisendi, G., Potenza, L., Luppi, M., Burger, J.A., et al. (2016). Ibrutinib modiﬁes the function of monocyte/macrophage population in chronic lymphocytic leukemia. Oncotarget 7, 65968–65981.
+89. Edwards V, D.K., Sweeney, D.T., Ho, H., Eide, C.A., Rofelty, A., Agarwal, A., Liu, S.Q., Danilov, A.V., Lee, P., Chantry, D., et al. (2018). Targeting of colony-stimulating factor 1 receptor (csf1r) in the cll microenvironment yields antineoplastic activity in primary patient samples. Oncotarget 9, 24576–24589.
+90. Polk, A., Lu, Y., Wang, T., Seymour, E., Bailey, N.G., Singer, J.W., Boonstra, P.S., Lim, M.S., Malek, S., and Wilcox, R.A. (2016). Colony-stimulating factor-1 receptor is required for nurse-like cell survival in
+
+chronic lymphocytic leukemia. Clin. Cancer Res. 22, 6118–6128.
+91. Coullomb, A., and Pancaldi, V. (2021). Tysserand—fast and accurate reconstruction of spatial networks from bioimages. Bioinformatics 37, 3989–3991.
+92. Ghaffarizadeh, A., Heiland, R., Friedman, S.H., Mumenthaler, S.M., and Macklin, P. (2018). An open source physics-based cell simulator for 3-d multicellular systems. PLoS Comput. Biol. 14, e1005991.
+93. Letort, G., Montagud, A., Stoll, G., Heiland, R., Barillot, E., Macklin, P., Zinovyev, A., and Calzone, L. (2019). A multi-scale agent-based modelling framework integrating physical dimension and cell signalling. Bioinformatics 35, 1188–1196.
+94. Francis, K., and Palsson, B.O. (1997). Effective intercellular communication distances are determined by the relative time constants for cyto/chemokine secretion and diffusion. Proc. Natl. Acad. Sci. USA 94, 12258–12262.
+95. Oyler-Yaniv, A., Oyler-Yaniv, J., Whitlock, B.M., Liu, Z., Germain, R.N., Huse, M., AltanBonnet, G., and Krichevsky, O. (2017). A tunable diffusion-consumption mechanism of cytokine propagation enables plasticity in cell-to-cell communication in the immune system. Immunity 46, 609–620.
+96. Kumar, R., and Rockett, P. (2002). Improved sampling of the pareto-front in multiobjective genetic optimizations by steady-state evolution: a pareto converging genetic algorithm. Evol. Comput. 10, 283–314.
+
+22 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+STAR+METHODS
+KEY RESOURCES TABLE
+
+ll
+OPEN ACCESS
+
+REAGENT or RESOURCE Antibodies Mouse monoclonal IgG1 anti-human CD11c Mouse monoclonal IgG2a anti-human CD14 Mouse monoclonal IgG1 anti-human CD16 Mouse monoclonal IgG1 anti-human CD163 Mouse monoclonal IgG1 anti-human CD206 Mouse monoclonal IgG1 anti-human CD5 Mouse monoclonal IgG1 anti-human CD19
+Chemical, peptides and recombinant proteins Ficoll-Paque PLUS CD14 MicroBeads, human LS columns EasySepä Human B Cell Enrichment Kit II Without CD43 Depletion Annexin-V Accutaseâ Cell Detachment Solution 7-AAD viability staining solution Human BD Fc Blockä
+Software and algorithms Netlogo OpenMole
+Other An Agent-Based Model of Monocyte Differentiation into Tumour-Associated Macrophages in Chronic Lymphocytic Leukemia
+
+SOURCE
+BD Pharmingenä BD Pharmingenä BD Pharmingenä Sony Sony Sony Sony
+Cytvia Miltenyi Miltenyi STEMCELL Miltenyi Biolegend OZYME Sony BD Pharmingenä
+(Tisue & Wilensky, 2004)56 (Reuillon et al, 2013)63
+Verstraete et al.; This paper
+
+IDENTIFIER
+BD Pharmingenä; RRID: AB_395793 557742; RRID: AB_2687593 560995; RRID: AB_395807 RT2268090 RT2205630 RT2103110 RT2111170
+17144003 130-050-201 130-042-401 17963 130-092-052 423201 RT2702020 564219; RRID: AB_2728082
+https://ccl.northwestern.edu/netlogo/ https://openmole.org/
+https://github.com/VeraPancaldiLab/ Agent-Based-Model-of-NLC-in-CLL
+
+RESOURCE AVAILABILITY Lead contact Further information and any related requests should be directed to and will be fulﬁlled by the lead contact, Vera Pancaldi (vera.pancaldi@inserm.fr).
+Materials availability This study did not generate new unique reagents.
+Data and code availability All the ﬁles used for model simulation in Netlogo, parameter optimization in OpenMOLE and statistical analysis of the outputs are available in GitHub: https://github.com/VeraPancaldiLab/Agent-BasedModel-of-NLC-in-CLL. The NetLogo model can also be run online on NetLogoWeb at https://www. netlogoweb.org/. Any additional information required to reanalyze the data reported in this paper is available from the corresponding authors upon request.
+METHOD DETAILS Patient and blood samples Blood samples were obtained after informed consent and stored at the HIMIP collection. According to French law, the HIMIP collection was declared to the Ministry of Higher Education and Research (DC
+
+iScience 26, 106897, June 16, 2023 23
+
+ll
+OPEN ACCESS
+2008-307 collection 1) and a transfer agreement (AC 2008-129) was agreed after approbation by the ‘‘Comite´ de Protection des Personnes Sud-Ouest et Outremer II’’ (ethical committee). Clinical and biological annotation of samples were declared to the Comite´ National Informatique et Liberte´ s (CNIL; data processing and liberties national committee).
+Cell culture We used two different in vitro co-culture systems which we monitored through cell counting by hemocytometer and FACS analysis at different time points. In the ﬁrst experimental system referred to as ‘‘PBMC autologous cultures’’, CLL Peripheral Blood Mononuclear Cells (PBMC) were isolated from patients’ blood and were directly cultured in vitro. PBMC are composed of cancerous CLL cells and include around 1% of monocytes and traces of other immune cells, including lymphocytes (1-5% of T, B and NK cells). In the second experimental system referred to as ‘‘heterologous co-cultures’’, CLL cells were isolated from CLL patients’ PBMC and mixed with varying concentrations of monocytes puriﬁed from healthy donors, to assess the relationship between the initial density of healthy donor monocytes and the level or survival of cancer cells after 9 days of co-culture, with and without NLC formation (i.e. with and without monocytes in the co-culture).
+PBMC autologous cultures To generate autologous NLCs, PBMC were isolated from the blood of CLL patients and were cultured at 107 cells/mL in RPMI 1640 supplemented with 10% Fetal Bovine Serum (FBS) and and 1% Penicillin/ Streptomycin (Gibco) in the incubator at 37C with 5% CO2. Cells were cultured for 13 days during which differentiation of the NLCs was followed by bright ﬁeld imaging microscopy and phenotype of the cells was assessed by ﬂow cytometry (presence of CD14, CD163 and CD206) at the ﬁnal day of the culture. CLL cell samples were taken every day (or every 2 or 3 days, depending on the patient) to measure the remaining cell concentration by hemocytometer and cell viability by ﬂow cytometry using AnnexinV/7-AAD staining.
+Heterologous co-cultures To generate heterologous co-cultures, CLL cells from the PBMC fraction were isolated using negative selection (EasySepä Human B Cell Enrichment Kit II Without CD43 Depletion, STEMcell) and monocytes from healthy donors’ PBMC were isolated using a positive selection method (CD14 MicroBeads, human, Miltneyi). Subsequently, CLL cells at 107 cells/mL were mixed with varying concentrations of puriﬁed monocytes. At Day 9 concentration and viability of the CLL cells was measured and the phenotype of NLCs was assessed by FACS. CLL PBMC used for the autologous co-cultures contained > 85% of CLL cells and 0.21-3.48% of monocytes, as assessed by ﬂow cytometry. Purity of the isolated CLL cells and monocytes exceeded 95%.
+Flow cytometry Follow-up of monocyte-to-NLC differentiation was performed by analysis of changes in the expression of myeloid cell markers by ﬂow cytometry. Brieﬂy, at different time points, autologous CLL patient’s PBMC were gathered from 1 well of 6-well plate. In order to remove adherent macrophages, the cells were washed twice with PBS, covered with 1 mL of Versene solution and incubated for 30 min at 4C. Afterwards 0.5 mL of FBS was added and cells were further detached with gentle scraping (Sarstedt). Both ﬂoating and adherent cell fractions were combined, washed in PBS and re-suspended in ﬂow cytometry buffer (PBS + 2% FBS) containing Human BD Fc Blockä (2.5 m g/mL) and incubated for 15 min at 4C. Subsequently cells were stained with CD14, CD16, CD163 and CD206 antibodies (BD Pharmingen) at saturating concentrations and incubated for 20 min at 4C. After washing, samples were resuspended in PBS and analyzed by LSRII ﬂow cytometer (BD Biosciences). Results were further processed using Flow Logic 700.2A (Inivai Technologies Pty. Ltd) software.
+Agent based model At each time step, 3 main processes are executed by each cell: update-position, update-properties and update-class. Movements concern all cells except the Dead ones, which are immobile. Cell motility can either be random or directional, for example when the NeedSignal cancer cells move towards NLCs, or when the phagocytic myeloid cells move towards Apoptotic or Dead cancer cells. Phagocytosis is modeled as an active search by the myeloid cells towards Dead and Apoptotic cancer cells. If the
+24 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+iScience
+Article
+myeloid cell encounters a Dead and Apoptotic cancer cell within its characteristic perception radius (i.e. sensing distance), it will phagocytose it with its characteristic probability (i.e. phagocytosis efﬁciency), and the phagocytosed cancer cell will be cleared from the simulation. In the reverse case, the myeloid cell will move to a random surrounding patch. Properties updates concern the cancer cells life property, the differentiation status of Monocytes into Macrophages, the nlc-polarization status of Macrophages into NLCs and the anti-apoptotic signals which are present on each patch. At each time step, agents can change their class based on the comparison of their property values and speciﬁc optimized thresholds. For example, NeedSignal cancer cells will turn into Apoptotic cells if their life property value goes below the apoptosis threshold. Apoptotic cancer cells will convert to Dead if their life property value goes below the death threshold. Myeloid cells will differentiate from Monocyte to Macrophage depending on their differentiation status compared to the differentiation threshold. Macrophages will polarize into NLCs, depending on their nlc-polarization status compared to the NLC threshold.
+The UML class diagrams shown on Figure S4 display every action performed by each agent class in detail:
+ Monocytes can perform 3 actions: move, perform phagocytosis and differentiate into Macrophages. Monocytes can move towards Apoptotic or Dead CLL cells in their perception radius (monosd), and will phagocytose these cells with a speciﬁc probability (mono4eff). If they cannot ﬁnd any Dead or Apoptotic cancer cell, they will move randomly. At the beginning of the simulation, Monocytes start to adhere progressively to the substrate (differentiation property increments by 1 at each time step) and will differentiate into Macrophages after 2 to 3 days (monodthifrfeshold).
+ Macrophages can perform 4 actions: move, perform phagocytosis, polarize into NLCs and kill the NeedSignal cancer cells. Similarly to Monocytes, Macrophages can move towards Apoptotic or Dead cells in their perception radius (macrosd) and phagocytose them with their speciﬁc probability (macro4eff). If they cannot ﬁnd any Dead or Apoptotic cancer cell, they will move randomly. Macrophages are also able to directly kill NeedSignal CLL cells with a low characteristic probability between 0% and 5% (macrokeff). At each time step, their nlc-polarization property will increase by 1 if they are located next to a NeedSignal or Apoptotic cancer cell, and will decrease by 1 in the reverse case. The complete polarization into NLC will occur when the Macrophages have been in contact with cancer cells for a sufﬁcient duration (nlcthreshold). Thus, nlcthreshold can be seen as a proxy for the number of accumulated hours for which a Macrophage has been in contact with at least one NeedSignal or Apoptotic cancer cell.
+ NLCs can perform 3 actions: move, perform phagocytosis and secrete anti-apoptotic signals on patches. Similar to Macrophages, NLCs will move in the direction of Apoptotic or Dead CLL cells in their perception radius (nlcsd), and will phagocytose them with their characteristic probability (nlc4eff). If they cannot ﬁnd any Dead or Apoptotic cancer cell, they will move randomly. At each time step, if they are located next to a NeedSignal cancer cell, NLCs will secrete 1 unit of antiapoptotic signals on the patch they are located on. If they are not surrounded by any NeedSignal cancer cell, they will decrease their nlc-polarization property by 1.
+ NeedSignal cancer cells can perform 3 actions: move, decrease their life property value (default behavior) or increase their life property value (through anti-apoptotic signals). Cancer cell movement involves actively searching for NLCs around them in a characteristic perception radius (nssd) with a characteristic movement probability (nsmp). If an NLC is located in its perception radius, the NeedSignal cancer cell will move towards it, otherwise it will move randomly . Importantly, when a NeedSignal cancer cell ﬁnds an NLC, it will remain attached to it on n layers (with n being the number of layers of cancer cells that NLCs can have around them, corresponding to the parameter layersnlc). This process can greatly impact how the NLCs will move and perform phagocytosis, due to the inherent relationship between layersnlc and nlcsd. By default, a NeedSignal cancer cell will have its life property value decrease by 1 unit at each time step. However, if the cancer cell is located on a patch containing more than 1 unit of anti-apoptotic signal, it will consume 1 unit of the antiapoptotic signal and get an increment of anti À apoboost on its life property value, helping it ﬁght apoptosis and survive overall longer. The NeedSignal cell life property represents the number of hours it can remain in the NeedSignal state before reaching the apoptosis threshold (apothreshold). The apoptosis threshold is set to 0 since it represents a threshold below which the cancer cells enter
+
+ll
+OPEN ACCESS
+
+iScience 26, 106897, June 16, 2023 25
+
+ll
+OPEN ACCESS
+an irreversible apoptotic state from which they cannot be rescued. NeedSignal cancer cells cannot be phagocytosed but they can be killed by Macrophages.
+ Apoptotic cancer cells can perform 2 actions: move and decrease their life property value. Apoptotic cancer cells move randomly with their characteristic movement probably (apomp). This movement probability will impact the overall phagocytosis efﬁcacy since it affects the possible encounters between Apoptotic cells and phagocytic cells. In the irreversible Apoptotic state, cancer cells can no longer beneﬁt from the anti-apoptotic signals from NLCs and will subsequently die, following a decrement of their life property by 1 at each time step until they reach the death threshold (deaththreshold), which is set to -500 hours based on ﬁtting timings observed on CLL cell monocultures. Apoptotic cancer cells can be phagocytosed by Macrophages or NLCs.
+ Dead cancer cells can perform 1 action: decrease their life property value. In this state, cancer cells can no longer move and can only be phagocytosed.
+ Patches can perform 1 action: update their amount of anti-apoptotic signals. At each time step, if an NLC is located on a given patch and is located next to a NeedSignal cancer cell, the amount of antiapoptotic signals on this patch will increase by 1. In absence of any NLC, and if some amount of anti-apoptotic signals is already present on the Patch, the total amount will decrease by 0.1% of its actual value (arbitrarily set to a negligible decrease in this model). This is inspired by cytokine diffusion processes94,95 that will impact the 8 neighboring patches which will thus receive 1/8 of 0.1% of the chemical.
+Model stochasticity In this model, stochasticity is used to describe cell motility and heterogeneity of property values in the cell population at initialization. The stochastic aspect in cell motility consists in randomly chosen moving directions when performing different actions (move, phagocytose), whereas cell heterogeneity consists in probabilistic distributions at instantiation of the different cell types. In this way, the model cells of the same type are asynchronous in their actions. The corresponding parameters were explored within empirically chosen ranges and optimized through the genetic algorithm to ﬁt the viability and concentration dynamics observed experimentally. More speciﬁcally:
+ Monocytes. The cells are initialized with a property value of differentiation taken from a normal distribution N(0, monodNisff). The differentiation time required for Monocytes to differentiate into Macrophages is monodthifreshold.
+ Macrophages. The cells are instantiated with a property value of nlc-polarization taken from a normal distribution N(macronNlmc À pol, macronNlsc À pol) with the mean of the distribution corresponding to the time when the ﬁrst NLCs should be observed experimentally.
+ NeedSignal cancer cells. The cells are initialized with various values of life property value taken from a Gamma distribution G (x, nslGifae À init, nslGifbe À init), with nslGifae À init being the shape and nsGlifbe À init the rate of the distribution.
+ Density of the world. Considering the surface available for the cells in the culture wells (12-well plates, with a planar surface of 3.5cm2 in each well), a diameter of 5 m m for the CLL cells, a seeding concentration of 107 cells/mL and assuming a spherical shape of the cells, we estimated the surface cell density to be around 55% (ratio of the surface occupied by the CLL cells to the total surface of the well).
+Parameter optimization Variables related to cell density, initial monocyte proportions, the time-scales and heterogeneity of monocyte-to-macrophage differentiation, NLC formation and CLL cell apoptosis duration were estimated or optimized based on experimental data from in vitro PBMC autologous cultures . The model involves 19 parameters that were optimized with the NSGA-II genetic algorithm (Table S1). Most of the model parameters (such as the sensing distances, the NLC polarization, the protective effects of the anti-apoptotic signals, or the NLC threshold) are associated with the modeling procedure and do not necessarily have an exact measurable biological or physical counterpart, nor a real-world unit value. Therefore, parameter values should not be taken as absolute but rather as representative for the process they encode. Parameter ranges
+26 iScience 26, 106897, June 16, 2023
+
+iScience
+Article
+
+iScience
+Article
+able to reproduce the observed experimental dynamics were selected and parameters were systematically explored in these empirically determined ranges.
+We derived 2 objective functions from experimental results obtained from in vitro co-cultures of monocytes and CLL cells, corresponding to two main readouts: cell viability (i.e, the ratio of initial CLL cell number minus dead cell number to the initial CLL cell number) and cell concentration (expressed as the ratio of total CLL cell number to the initial CLL cell number). We deﬁned the cost functions as the least square errors between the model predictions and the available experimental time-points on cell viability and concentration. Dealing with incomplete datasets, we considered only the time points in which the measurements were available for at least 4 patients. The OpenMOLE (Open MOdeL Experiment) software was used to perform 20’000 simulations exploring speciﬁc ranges of each of the 19 parameters (Table S1). OpenMOLE is a platform used to perform large-scale user-supplied model exploration, machine learning, optimization and data processing.63 In general, these procedures demand high computational time and power; for this reason OpenMOLE uses a DSL (Domain Speciﬁc Language) for distributed model exploration written in Scala. In this platform, the model optimization was automated with a genetic algorithm (NSGA-II) on the 2 objective functions. To initialize the genetic algorithm in OpenMOLE, default values were chosen, i.e. random values of initial population, mutation probability and crossover probability. The genetic algorithm convergence is ensured by using a Pareto converging algorithm (Figure 3B), which naturally samples the explored space and ensures that the population advances towards the Pareto front, thus choosing the the sets of parameters heuristically.96
+The optimization outputs generated by OpenMOLE were further analyzed, in order to select the set of parameters with the best ﬁt and prediction power. Firstly, to ensure robustness, the optimization outputs were ﬁltered to select only the sets of parameters which have been repeatedly simulated at least 50 times along the optimization process. The sets of parameters fulﬁlling this condition were represented in the form of a Pareto front (Figure 3B). Secondly, we ranked the sets of parameters according to their ﬁtness on viability and concentration in order to choose the best set of parameters for further model analysis. Since the two ﬁtnesses were anti-correlated, curve ﬁtting was performed using 3 speciﬁc parameter sets: (i) one with the best ﬁtness on viability, (ii) a second one with the best ﬁtness on concentration and (iii) a third one located at the knee-point on the Pareto front. We observed that the set corresponding to the knee-point produces the most similar viability and concentration dynamics to those observed experimentally (Figure 5A), as conﬁrmed by the R2 and NRMSE values. Figures 5B and 5C show the simulation results using models with parameters from the sets of best ﬁtness on viability and concentration dynamics. For computational reasons, parameter exploration was performed on 1000 cells, whereas the validation simulations were performed on 5000 cells, to underscore the scale-invariant results of our study.
+QUANTIFICATION AND STATISTICAL ANALYSIS Results are presented as mean per group with shaded areas showing the 95% conﬁdence intervals. Results were analyzed according to what is reported in ﬁgure legends. We used Normalized Root Mean Square Errors (NRMSE) and R2 as quantitative estimates to help evaluate how accurately the different models predict the experimentally observed data.
+
+ll
+OPEN ACCESS
+
+iScience 26, 106897, June 16, 2023 27
+

@@ -1,0 +1,16 @@
+Title:          Reinforcement Learning for Precision Oncology
+Subject:        Precision oncology is grounded in the increasing understanding of genetic and molecular mechanisms that underly malignant disease and offer different treatment pathways for the individual patient. The growing complexity of medical data has led to the implementation of machine learning techniques that are vastly applied for risk assessment and outcome prediction using either supervised or unsupervised learning. Still largely overlooked is reinforcement learning (RL) that addresses sequential tasks by exploring the underlying dynamics of an environment and shaping it by taking actions in order to maximize cumulative rewards over time, thereby achieving optimal long-term outcomes. Recent breakthroughs in RL demonstrated remarkable results in gameplay and autonomous driving, often achieving human-like or even superhuman performance. While this type of machine learning holds the potential to become a helpful decision support tool, it comes with a set of distinctive challenges that need to be addressed to ensure applicability, validity and safety. In this review, we highlight recent advances of RL focusing on studies in oncology and point out current challenges and pitfalls that need to be accounted for in future studies in order to successfully develop RL-based decision support systems for precision oncology.
+Keywords:       precision oncology; reinforcement learning; artificial intelligence; machine learning; dose adjustment; chemotherapy; radiotherapy
+Author:         Jan-Niklas Eckardt, Karsten Wendt, Martin Bornhäuser and Jan Moritz Middeke
+Creator:        LaTeX with hyperref
+Producer:       pdfTeX-1.40.21
+CreationDate:   09/15/21 20:12:08
+ModDate:        09/15/21 14:30:04
+Tagged:         no
+Form:           none
+Pages:          15
+Encrypted:      no
+Page size:      595.276 x 841.89 pts (A4) (rotated 0 degrees)
+File size:      1192367 bytes
+Optimized:      no
+PDF version:    1.7

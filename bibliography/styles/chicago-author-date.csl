@@ -19,7 +19,6 @@
     </contributor>
     <contributor>
       <name>Andrew Dunning</name>
-      <email>andrew.dunning@utoronto.ca</email>
       <uri>https://orcid.org/0000-0003-0464-5036</uri>
     </contributor>
     <contributor>
@@ -33,7 +32,7 @@
     <category citation-format="author-date"/>
     <category field="generic-base"/>
     <summary>The author-date variant of the Chicago style</summary>
-    <updated>2023-06-25T21:05:17+00:00</updated>
+    <updated>2023-12-10T00:40:26+00:00</updated>
     <rights license="http://creativecommons.org/licenses/by-sa/3.0/">This work is licensed under a Creative Commons Attribution-ShareAlike 3.0 License</rights>
   </info>
   <locale xml:lang="en">
