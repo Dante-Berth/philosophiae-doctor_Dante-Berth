@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "agent_based_model_ABM/abs_general/Agent-Based Models.md",
+                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "agent_based_model_ABM/abs_general/Agent-Based Models.md",
+                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "agent_based_model_ABM/abs_general/Agent-Based Models.md",
+                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "agent_based_model_ABM/abs_general/Agent-Based Models.md"
+                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md"
               }
             }
           }
@@ -133,7 +133,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 200,
+    "collapsed": true
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -147,8 +148,9 @@
   },
   "active": "b189fd8ca6d4f6cd",
   "lastOpenFiles": [
-    "agent_based_model_ABM/abs_general/AGENT-BASED MODELING AND SIMULATION.md",
     "agent_based_model_ABM/abs_general/Agent-Based Models.md",
+    "agent_based_model_ABM/abs_general/AGENT-BASED MODELING AND SIMULATION.md",
+    "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
     "agent_based_model_ABM/abs_general/Pasted image 20231211112350.png",
     "Untitled.md",
     "reinforcement_learning/reinforcement_learning_medicine",
