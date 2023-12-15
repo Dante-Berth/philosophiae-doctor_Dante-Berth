@@ -43,5 +43,4 @@ ABM is a excellent model which does not suffer from asumptions.
 ![[ML_methods_3_Innovations_in_integrating.png]]
 
 
-
-
+"Inspired by this potential synergy, the remainder of this Review highlights some published studies that have integrated ML with ABMs in the following ways, in order to create more advanced and accurate computational models of biological systems, at both the multicellular and epidemiological scales:  Learning ABM Rules via ML: Reinforcement learning and supervised learning methods can be used to infer and refine agent rules, which are critical inasmuch as these rules are applied at each discrete time step and, thus, largely define the ABM.  Parameter Calibration and Surrogate Models of ABMs: Stochastic optimization approaches, such as genetic algorithms and particle-swarm methods, can be used to calibrate ABM parameters. Supervised learning algorithms can be trained to create surrogate models of an ABM, which also aids in calibration and in mitigating the computational costs of having to execute numerous ABMs.  Exploring ABMs via ML: ML methods can help explore the complex, high-dimensional parameter space of an ABM, in terms of sensitivity analysis, model robustness, and so on."
