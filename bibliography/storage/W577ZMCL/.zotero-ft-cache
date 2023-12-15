@@ -1,0 +1,359 @@
+1
+From Principal Subspaces to Principal Components with Linear Autoencoders
+Elad Plaut
+
+arXiv:1804.10253v3 [stat.ML] 28 Dec 2018
+
+Abstract—The autoencoder is an effective unsupervised learning model which is widely used in deep learning. It is well known that an autoencoder with a single fully-connected hidden layer, a linear activation function and a squared error cost function trains weights that span the same subspace as the one spanned by the principal component loading vectors, but that they are not identical to the loading vectors. In this paper, we show how to recover the loading vectors from the autoencoder weights.
+I. BACKGROUND
+P RINCIPAL COMPONENT ANALYSIS (PCA) is a linear transformation that transforms a set of observations to a new coordinate system in which the values of the ﬁrst coordinate have the largest possible variance, and the values of each succeeding coordinate have the largest possible variance under the constraint that they are uncorrelated with the preceding coordinates. They are often found by either computing the eigendecomposition of the covariance matrix or by computing the singular value decomposition of the observations.
+By keeping only the ﬁrst few principal components, PCA can be used for dimensionality reduction. The decorrelation of the coordinates is also a useful property, and PCA is sometimes used as a preprocessing step for whitening a dataset before using it as an input into an optimization problem such as a neural network classiﬁer.
+One of the properties of PCA is that out of all possible linear transformations, the reconstructions of the observations from the leading principal components have the least total squared error. Autoencoders are neural networks that aim to minimize the error of reconstructions of observations. It is well known that an autoencoder with a single fully-connected hidden layer, a linear activation function and a squared error cost function is closely related to PCA - its weights span the principal subspace, which is the subspace spanned by the ﬁrst loading vectors [1], [2]. However, they are not equal to the loading vectors.
+This paper proposes a simple method for recovering the loading vectors from the weights of a linear autoencoder. This allows the usage of autoencoders for computing PCA, unlike existing methods which merely ﬁnd the principal subspace. After recovering the loading vectors, the solution has the following properties: (i) it is unique; (ii) in the transformed data, different coordinates are uncorrelated; (iii) the coordinates are sorted in descending order of variance; and (iv) the solutions for reduction to different dimensions are nested: when reducing the data from dimension n to dimension m1, the ﬁrst m2 vectors (m2 < m1) are the same as the solution for reduction from dimension n to m2. These properties do not hold for a general basis for the principal subspace, which is what the autoencoder weights converge to.
+
+Even though any method for computing PCA using autoencoders is highly inefﬁcient for small datasets, for large datasets such a method is desirable because of its various advantages compared to the standard methods. Autoencoders can be trained by a variety of stochastic optimization methods that have been developed for training deep neural networks. These optimizers can handle high-dimensional training data such as images, and a large number of them. They are suitable for the online learning scenario in which new data arrives over time, and they do not require subtracting from each example the element-wise mean of the entire training set. While several online PCA methods have been proposed for meeting these demands [3], [4], [5], our method is the ﬁrst to simply recover the loading vectors from the weights of an autoencoder.
+
+II. INTRODUCTION
+
+A. Principal Component Analysis
+
+Let {yi}Ni=1 be a set of N observation vectors, each of dimension n. We assume that n ≤ N , which is the more
+
+common scenario in machine learning, but a similar analysis
+can be done for the case of n > N . Let Y ∈ Rn×N be a matrix whose columns are {yi}Ni=1,
+
+|
+
+|
+
+Y =  y1 · · · yN  .
+
+|
+
+|
+
+The element-wise average of the N observations is an n dimensional signal which may be written as:
+
+1N
+
+1
+
+¯y = N
+
+yi = N Y1N ,
+
+i=1
+
+where 1N ∈ RN×1 is a column vector of all-ones. Let Y0 be a matrix whose columns are the centered observations (we center each observation yi by subtracting ¯y from it):
+
+Y0 = Y − ¯y1TN .
+
+A linear transformation of a ﬁnite dimensional vector may be expressed as a matrix multiplication:
+
+xi = WT yi,
+
+where yi ∈ Rn, xi ∈ Rm, and W ∈ Rn×m. Each element j
+
+in the vector xi is an inner product between yi and the j-th
+
+column of W, which we denote by wj.
+
+Let X ∈ Rm×N be a matrix whose columns are the set of N
+
+N
+
+vectors
+
+of
+
+transformed
+
+observations,
+
+let
+
+¯x
+
+=
+
+1 N
+
+xi
+
+=
+
+1 N
+
+X1N
+
+i=1
+
+be the element-wise average, and X0 = X − ¯x1TN the centered matrix. Clearly, X = WT Y and X0 = WT Y0.
+
+2
+
+When the matrix WT represents the transformation that
+
+applies principal component analysis, we denote W = P, and
+
+the columns of P, denoted
+
+pj
+
+n , are referred to as loading
+j=1
+
+vectors. The transformed vectors {xi}Ni=1 are referred to as
+
+principal components or scores. The ﬁrst loading vector is
+
+deﬁned as the unit vector with which the inner products of
+
+the observations have the greatest variance:
+
+p1
+
+=
+
+max
+w1
+
+wT1 Y0YT0 w1
+
+s.t.
+
+wT1 w1
+
+=
+
+1.
+
+(1)
+
+The solution to (1) is known to be the eigenvector of the sample covariance matrix Y0YT0 corresponding to its largest
+eigenvalue. We normalize the eigenvector and disregard its
+
+sign. Next, p2 is the unit vector which has the largest variance of inner products between it and the observations after
+
+removing the orthogonal projections of the observations onto
+
+p1. It may be found by solving:
+
+p2
+
+=
+
+max
+w2
+
+wT2
+
+Y0 − p1pT1 Y0
+
+Y0 − p1pT1 Y0 T w2
+
+s.t. wT2 w2 = 1. (2)
+
+The solution to (2) is known to be the eigenvector corresponding to the largest eigenvalue under the constraint that it is not collinear with p1. Similarly, the remaining loading vectors are equal to the remaining eigenvectors of Y0YT0 corresponding to descending eigenvalues. The eigenvalues of Y0YT0 , which is a positive semi-deﬁnite matrix, are non-negative. They are not necessarily distinct, but since it is a symmetric matrix it has n eigenvectors that are all orthogonal, and it is always diagonalizable. Thus, the matrix P may be computed by diagonalizing the covariance matrix:
+
+Y0YT0 = PΛP−1 = PΛPT ,
+
+where Λ elements
+
+= {λi
+
+X0 }ni=1
+
+XT0 are
+
+is a diagonal matrix whose sorted in descending order, the
+
+diagonal columns
+
+of P are orthonormal, i.e. P−1 = PT . The transformation back
+
+to the observations is Y = PX. The fact that the covariance
+
+matrix of X is diagonal means that PCA is a decorrelation
+
+transformation. By dividing each coordinate by the square
+
+root of its corresponding eigenvalue, PCA can be used as
+
+a whitening transformation, which is sometimes used as a
+
+preprocessing step in order to cause optimization problems
+
+to converge more easily.
+
+B. Dimensionality reduction
+
+PCA is often used as a method for dimensionality reduction, the process of reducing the number of variables in a model in order to avoid the curse of dimensionality. This is done by simply keeping the ﬁrst m principal components (m < n), i.e., applying the truncated transformation
+
+Xm = PTmY,
+where each column of Xm ∈ Rm×N is a vector whose elements are the ﬁrst m principal components, and Pm is a matrix whose columns are the ﬁrst m loading vectors,
+
+|
+
+|
+
+Pm =  p1 · · · pm  ∈ Rn×m.
+
+|
+
+|
+
+Intuitively, by keeping only m principal components, we are losing information, and we minimize this loss of information by maximizing their variances. Many iterative algorithms (e.g., QR algorithm, Jacobi algorithm, and the power method) can efﬁciently ﬁnd the m largest eigenvalues of Y0YT0 and their corresponding eigenvectors without having to fully diagonalize the matrix. Yet, for high dimensional data, computing Y0YT0 may be prohibitive.
+C. Singular-value decomposition
+Any matrix Y0 ∈ Rn×N may be factorized as Y0 = UΣVT , where U ∈ Rn×n and V ∈ RN×N are both orthogonal matrices and Σ ∈ Rn×N is a matrix whose elements are nonnegative real numbers on the diagonal and zero elsewhere. The diagonal elements {σi}ni=1, referred to as singular values, are sorted in descending order, and the columns of U and V are referred to, respectively, as left and right singular vectors. Assuming n ≤ N and Y0 is full-rank, the columns of U are an orthonormal basis for Rn. If n > N (the number of observation is smaller than the dimension of each observation), then the ﬁrst n columns of U are an orthonormal basis for the column space of Y0, and the remaining N − n columns are an orthonormal basis for its nullspace.
+The covariance matrix may be written as:
+Y0YT0 = UΣVT VΣT UT = UΣΣT U−1,
+where ΣΣT is a diagonal matrix. Thus, singular-value decomposition of Y0 is equivalent to eigendecomposition of Y0YT0 . The singular values of Y0 are the square roots of the eigenvalues of Y0YT0 , and the left singular vectors of Y0 are the eigenvectors of Y0YT0 . Eigendecomposition is unique up to the scale of the eigenvectors, which we normalize, and to permutations of the eigenvectors and their corresponding eigenvalues, which we sort in descending order. Therefore, the left singular vectors of Y0 must be equal to the loading vectors of Y (up to their sign, which we disregard).
+Iterative algorithms (e.g., QR algorithm, one-sided Jacobi algorithm) can efﬁciently ﬁnd the m largest singular values and their corresponding left singular vectors without having to fully decompose the matrix.
+D. PCA and large sets of high-dimensional data
+When the number of observations N is small enough to ﬁt in memory, SVD is often the preferred method for computing the loading vectors, as it avoids computing the covariance matrix Y0YT0 , which is desirable especially when n is large.
+When the number of observations N is large but the dimension n is sufﬁciently small, Y0YT0 = N (yi − ¯y) (yi − ¯y)T
+i=1
+may be computed sequentially, with a memory requirement of O n2 instead of O (nN ). Thus, there is no need to load the entire dataset into memory.
+However, when the number of observations is large and each observation is high-dimensional (i.e., both N and n are large), this too may be infeasible. Online methods [3], [4], [5] iterate through the dataset one example at a time or in minibatches. When applied to images, the images are more often divided
+
+3
+
+into small patches, and PCA is applied to patches rather than to the entire images; this is known as local PCA [6].
+
+E. Minimum total squared reconstruction error
+
+Interestingly, Pm is also a solution to:
+
+min
+W∈Rn×m
+
+Y0 − WWT Y0
+
+2 F
+
+s.t. WT W = Im×m,
+
+(3)
+
+where F denotes the Frobenius norm. According to this formulation, the m leading loading vectors are an orthonormal basis which spans the m dimensional subspace onto which the projections of the centered observations have the minimum squared difference from the original centered observations. In other words, Pm compresses each centered vector of length n into a vector of length m (where m ≤ n) in such a way that minimizes the sum of total squared reconstruction errors.
+It is well known [7] and easily veriﬁed that Pm indeed solves (3). Yet, the minimizer of (3) is not unique: W = PmQ is also a solution, where Q ∈ Rm×m is any orthogonal matrix, QT = Q−1. Multiplying Pm from the right by Q transforms the ﬁrst m loading vectors into a different orthonormal basis for the same subspace.
+
+G. Linear autoencoders
+
+In the case that no non-linear activation function is used, xi = W1yi + b1 and ˆyi = W2xi + b2. If the cost function is the total squared difference between output and input, then
+training the autoencoder on the input data matrix Y solves:
+
+min
+W1 ,b1 ,W2 ,b2
+
+Y − W2 W1Y + b11TN + b21TN
+
+2
+F.
+
+(4)
+
+In [1], it is shown that if we set the partial derivative with respect to b2 to zero and insert the solution into (4), then the problem becomes:
+
+min
+W1 ,W2
+
+Y0 − W2W1Y0
+
+2 F
+
+Thus, for any b1, the optimal b2 is such that the problem becomes independent of b1 and of ¯y. Therefore, we may focus only on the weights W1, W2. In [2] it is shown that when setting the gradients to zero, W1 is the left Moore-Penrose pseudoinverse of W2 (and W2 is the right pseudoinverse of W1):
+W1 = W†2 = WT2 W2 −1 WT2
+
+Thus, the minimization remains with respect to a single matrix:
+
+F. Autoencoders
+A neural network that is trained to learn the identity function is called an autoencoder. Its output layer has the same number of nodes as the input layer, and the cost function is some measure of the reconstruction error. Autoencoders are unsupervised learning models, and they are often used for the purpose of dimensionality reduction [8]. A simple autoencoder that implements dimensionality reduction is a feed-forward autoencoder with at least one layer that has a smaller number of nodes, which functions as a bottleneck. After training the neural network using backpropagation, it is separated into two parts: the layers up to the bottleneck are used as an encoder, and the remaining layers are used as a decoder.
+In the simplest case, there is only one hidden layer (the bottleneck), and the layers in the network are fully connected. A vector yi ∈ Rn×1 passes through the hidden layer, which outputs xi ∈ Rm×1 according to the mapping xi = a (W1yi + b1), where W1 ∈ Rm×n is referred to as the weight matrix of the ﬁrst layer, b1 ∈ Rm×1 is referred to as the bias vector of the ﬁrst layer, and m < n. The function a, referred to as the activation function, operates element-wise and is typically a non-linear function such as the rectiﬁed linear unit (ReLU). The second layer maps xi to ˆyi ∈ Rn×1 according to ˆyi = a (W2xi + b2) = a (W2a (W1yi + b1) + b2), where W2 ∈ Rn×m and b2 ∈ Rn×1 are the weight matrix and bias vector of the second layer. The parameters W1, b1, W2, b2 are found by minimizing some cost function measuring the difference between the output ˆyi and the input yi. Using backpropagation with an optimizer such as stochastic gradient descent, each data sample from {yi}Ni=1 is fed through the network to compute xi and ˆyi, which are then used to compute the gradients and to update the parameters.
+
+min
+W2 ∈Rn×m
+
+Y0 − W2W†2Y0
+
+2 F
+
+(5)
+
+The matrix W2W†2 = W2 WT2 W2 −1 WT2 is the orthogonal projection operator onto the column space of W2 when its columns are not necessarily orthonormal. This problem is very similar to (3), but without the orthonormality constraint.
+In [1] and [2] it is shown that W2 is a minimizer of (5) if and only if its column space is spanned by the ﬁrst m loading vectors of Y. This can also be shown by applying the QR decomposition to W2, which transforms the problem (5) into the one in (3). As a result, it is possible to solve (3) by ﬁrst solving the unconstrained problem (5), and then orthonormalizing the columns of the solution, e.g. using the Gram-Schmidt process. However, this does not recover the loading vectors Pm, but rather PmQ for some unknown orthogonal matrix Q.
+The linear autoencoder is said to apply PCA to the input data in the sense that its output is a projection of the data onto the low dimensional principal subspace. However, unlike actual PCA, the coordinates of the output of the bottleneck are correlated and are not sorted in descending order of variance. In addition, the solutions for reduction to different dimensions are not nested: when reducing the data from dimension n to dimension m1, the ﬁrst m2 vectors (m2 < m1) are not an optimal solution to reduction from dimension n to m2, which therefore requires training an entirely new autoencoder.
+Several methods have been proposed for neural networks that compute the exact loading vectors [9], [10], [11], [12], [13]. However, they require speciﬁc algorithms for iteratively updating the weights, and as such are similar to online PCA methods. No method has so far been proposed for recovering the loading vectors from a simple linear autoencoder that is independent of the optimization method used for training it.
+
+4
+
+III. METHOD
+Hypothesis: The ﬁrst m loading vectors of Y are the ﬁrst m
+left singular vectors of the matrix W2 which minimizes (5). Note: an earlier version of this work attempted to prove this
+statement, but was found to be erroneous. In other words, instead of computing the ﬁrst m left singular
+vectors of Y0 ∈ Rn×N , we may train a linear autoencoder on the (non-centered) dataset Y and then compute the ﬁrst m left singular vectors of W2 ∈ Rn×m, where typically m << N . The loading vectors may also be recovered from the weights of the hidden layer, W1. If W2 = UΣVT , then W1 = W†2 = VΣ†UT , and WT1 = U Σ† T VT . Thus, the ﬁrst m left singular vectors of WT1 ∈ Rn×m are also equal to the ﬁrst m loading vectors of Y.
+
+singular vectors are approximately equal to them up to sign. Seven of the vectors have opposite signs, which is reﬂected in their inverted gray levels.
+After computing the loading vectors, we applied three different transformations to the centered: PTmY0, WT2 Y0, and UTmY0. Fig. 3 shows the covariance matrix in the transformed coordinates for the three transformations. As expected, UTm transformed the data to coordinates in which the covariance is a diagonal matrix with descending diagonal elements (similarly to PTm), while WT2 did not.
+In order to further reduce the dimensionality to m2 < 16, all we need to do is keep the ﬁrst m2 rows of UTmY0.
+B. CUB-200-2011
+
+IV. EXPERIMENTS An important advantage of applying PCA using a linear autoencoder is that it is very simple to implement using popular machine learning frameworks. We release a sample implementation of a linear autoencoder and the recovery of the loading vectors from its weights which uses the Keras library. It can be found at https://github.com/plaut/linear-ae-pca. As in any neural network, we initialize the values of the parameters, including W2, to random numbers. Notice that the optimization is convex over W2 for a ﬁxed W1 and it is convex over W1 for a ﬁxed W2, but it is not jointly convex and has many saddle points which may be far from optimal. The optimization may beniﬁt from a more sophisticated update than basic stochastic gradient descent, and we chose to use the Adam optimizer. Weight decay regularization, which penalizes unreasonable factorizations, was also found to be beneﬁcial.
+A. MNIST We trained a linear autoencoder on the MNIST training
+dataset [16], which contains 60,000 grayscale images of handwritten digits, each of size 28 × 28. Fig. 1 shows a few examples of images from the dataset. We set the dimensions of the network for reduction from a dimension of 28 × 28 = 784 to a dimension of 16. Then, we applied our method for recovering the loading vectors from the weights of the autoencoder.
+For comparison, Fig. 2(a) shows the ﬁrst 16 loading vectors as computed using the standard method of applying SVD to the entire dataset after centering it. Fig. 2(b) shows the columns of W2, and Fig. 2(c) shows the columns of Um (the ﬁrst m left singular vectors of W2). It is evident that although the columns of W2 are entirely different from the loading vectors, their left
+Fig. 1. Examples of images from the MNIST dataset.
+
+Computing PCA using a linear autoencoder only becomes advantageous when handling a large set of large images. We applied the same technique to the CUB-200-2011 dataset [17], which contains 11,788 color images of birds. The images were resized to 256 × 256. Fig. 4 shows a few examples of images from the dataset. The autoencoder was set for dimensionality reduction from a dimension of 256 × 256 × 3 = 196, 608 to a dimension of 36. Then, the ﬁrst 36 loading vectors of the dataset were recovered by applying SVD to the weight matrix W2 and taking the ﬁrst 36 left singular vectors of it, they are shown in Fig. 5.
+In order to verify that the resulting transformation applies PCA, we centered the dataset and calculated the covariance in the transformed coordinates, shown in Fig. 6. As expected, it is approximately a diagonal matrix with descending elements on the diagonal.
+This dataset was too large to ﬁt in memory, so we did not compare the results to applying SVD to the entire dataset. One might suspect that the last loading vectors in Fig. 5 are evidence of underﬁtting due to their high spatial frequencies. In order to rule this out, we computed the loading vectors of a subset of 1,000 examples from the dataset by applying SVD to all the 1,000 examples after centering them, and they exhibited the same appearance.
+V. CONCLUSION
+It is in fact possible to use a linear autoencoder not only to project data onto the principal subspace, but to actually perform principal component analysis. Recovering the loading vectors amounts to simply applying SVD to the weight matrix of one of the two layers. The solution is independent of the optimization algorithm used to train the neural network. The advantages of implementing PCA this way are that is able to:
+• Process high-dimensional data. • Process datasets with large numbers of observations. • Avoid the need to center the data to element-wise zero
+mean. • Process new data online as it arrives. • Be implemented easily using very few lines of code, using
+the latest algorithms, software frameworks and hardware that are optimized for training neural networks.
+
+5
+
+(a) Pm
+
+(b) W2
+
+(c) Um
+
+Fig. 2. (a) The ﬁrst 16 loading vectors of MNIST, computed by applying SVD to the entire dataset, (b) the weights of a linear autoencoder trained on the dataset, (c) the left singular vectors of the autoencoder weights. Notice how the left singular vectors in (c) are very close to the loading vectors in (a) up to their sign (inversion of the gray levels in some of the images).
+
+(a) PTmY0YT0 Pm
+
+(b) WT2 Y0YT0 W2
+
+(c) UTmY0YT0 Um
+
+Fig. 3. The covariance matrix of the data in the transformed coordinates, according to (a) the loading vectors computed by applying SVD to the entire dataset, (b) the weights of the linear autoencoder, and (c) the left singular vectors of the autoencoder weights.
+
+Fig. 4. Examples of images from the CUB-200-2011 dataset.
+
+Fig. 5. The loading vectors of the CUB-200-2011 dataset, as recovered from the weight matrix W2.
+
+6
+Fig. 6. The covariance matrix of the CUB-200-2011 dataset in the transformed coordinates. As expected, the covariance is approximately diagonal with descending elements on the diagonal.
+REFERENCES
+[1] H. Bourlard and Y. Kamp, “Auto-association by multilayer perceptrons and singular value decomposition,” Biological Cybernetics, vol. 59(4-5), pp. 291–294, 1988.
+[2] P. Baldi and K. Hornik, “Neural networks and principal component analysis: Learning from examples without local minima,” Neural Networks, vol. 2(1), pp. 53–58, 1989.
+[3] M. Warmuth and D. Kuzmin, “Randomized online PCA algorithms with regret bounds that are logarithmic in the dimension,” Journal of Machine Learning Research, vol. 9, pp. 2287–2320, 2008.
+[4] J. Fend, H. Xu, S. Mannor, and S. Yan, “Online PCA for contaminated data,” Advances in Neural Information Processing Systems, pp. 764–772, 2013.
+[5] J. Fend, H. Xu, and S. Yan, “Online robust PCA via stochastic optimization,” Advances in Neural Information Processing Systems, pp. 404–412, 2013.
+[6] N. Kambhatla and T. Leen, “Dimension reduction by local principal component analysis,” Neural Computation, vol. 9(7), pp. 1493–1516, 1997.
+[7] C. Eckardt and G. Young, “The approximation of one matrix by another of lower rank,” Psychometrika, vol. 1, pp. 211–218, 1936.
+[8] G. Hinton and R. Salakhutdinov, “Reducing the dimensionality of data with neural networks,” Science, vol. 313(5786), pp. 504–507, 2006.
+[9] E. Oja, “Neural networks, principal components, and subspaces,” International Journal of Neural Systems, vol. 1(01), pp. 61–68, 1989.
+[10] J. Rubner and P. Tavan, “A self-organizing network for principalcomponent analysis,” EPL (Europhysics Letters), vol. 10(7), p. 693, 1989.
+[11] S. Kung and K. Diamantaras, “A neural network learning algorithm for adaptive principal component extraction (APEX),” ICASSP, pp. 861– 864, 1990.
+[12] E. Oja, “Principal components, minor components, and linear neural networks,” Neural Networks, vol. 5(6), pp. 927–935, 1992.
+[13] L. Xu, “Least mean square error reconstruction principle for selforganizing neural-nets,” Neural Networks, vol. 6(5), pp. 627–648, 1993.
+[14] D. A. Freedman, “Statistical models: Theory and practice.” Cambridge University Press, 2009.
+[15] A. Antoulas, “Approximation of large-scale dynamical systems,” SIAM, vol. 6, pp. 37–38, 2005.
+[16] Y. LeCun, C. Cortes, and C. Burges, “MNIST handwritten digit database,” 2010.
+[17] C. Wah, S. Branson, P. Welinder, P. Perona, and S. Belongie, “The Caltech-UCSD birds-200-2011 dataset,” no. CNS-TR-2011-001, 2011.
+

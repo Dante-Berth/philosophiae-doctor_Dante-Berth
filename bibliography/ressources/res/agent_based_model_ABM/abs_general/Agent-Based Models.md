@@ -53,9 +53,21 @@ The system can be characterized for each time steps by $A_{t}= \{a_{1}^{t},...,a
 > An "open ABM" allows for perturbations; the evolution of $A_{t}$ might result in exponential changes, influenced by external factors or disturbances.
 
 
+>[!Definition]
+>**Rules**  : refer to formulated guidelines that outline the specific, clearly defined behaviors an individual agent can execute within a discrete time-step. These behaviors are contingent upon the agent's current state and its immediate local environment, potentially responding to both. Rules can exhibit either probabilistic or deterministic characteristics, offering flexibility to consider various factors such as prior agent states, simulation time, and other parameters specific to the system being studied.
+>
+
+>[!definition] 
+>**Emergent properties** are the characteristics or behaviors that arise in a complex system as a result of interactions among its individual components.
 
 
+>[!attention] 
+>It is difficult to predict the final state of the model solely based on the properties or behaviors of individual components. That's why it is important to understand emergent properties.
 
+>[!question] 
+>How to predict the final state of the model given the rules or behaviors of agents ?
+
+ABM are not modelized to converge to an equilibrum state , it seems impossible to predict the final state noted as $A_{t_{n\to \infty}}$ or at least  $A_{t_{{n}}}$. ML framework can learn from ABM and could predict the final state or an equilibrum state.
 
 
 
