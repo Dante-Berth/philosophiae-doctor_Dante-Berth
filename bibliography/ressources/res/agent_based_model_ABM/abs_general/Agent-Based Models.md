@@ -58,7 +58,7 @@ The system can be characterized for each time steps by $A_{t}= \{a_{1}^{t},...,a
 >
 
 >[!definition] 
->**Emergent properties** are the characteristics or behaviors that arise in a complex system as a result of interactions among its individual components.
+>**Emergent properties**  : are the characteristics or behaviors that arise in a complex system as a result of interactions among its individual components.
 
 
 >[!attention] 

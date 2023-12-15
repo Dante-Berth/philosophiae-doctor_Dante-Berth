@@ -14,7 +14,8 @@ Systems are more complex in terms of their nonlinearity of features; some system
 ## What is an agent ?
 
 An agent is an autonomous  entity that interacts with its environment and other agents, has the ability to learn and adapt its behaviors based on experiences . Agents interact with other agents through various protocols. They can be diverse, heterogeneous, and dynamic in their attributes and behavioral rules, and their behavior can range from simple to complex, with some agents being adaptive and capable of learning from their environment. An agent have resource attributes such as energy,wealth...
-![[Pasted image 20231211112350.png]]
+
+![[typical_agent_AGENT-BASED MODELING AND SIMULATION.png]]
 
 ABM  is equivalent to Agent-based simulation "refers to a model in which the dynamic processes of agent interaction are simulated repeatedly over time, as in systems dynamics, time-stepped, discreteevent, and other types of simulation "
 

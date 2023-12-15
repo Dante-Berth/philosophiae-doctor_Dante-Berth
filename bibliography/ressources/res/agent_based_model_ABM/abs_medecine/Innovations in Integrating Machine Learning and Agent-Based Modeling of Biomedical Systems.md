@@ -29,14 +29,18 @@ In the field of biology, numerous questions come to light, including:
 > In what ways do the actions and interactions of individual entities impact larger-scale outcomes for the entire population?
 >How do these individual behaviors contribute to broader, population-wide results?
 
+"The discretized nature of ABMs, in time and space, allows them to capture the temporal stochasticity and spatial heterogeneities that are inherent to most complex dynamical systems, biological or otherwise. The variabilities that arise from stochasticity and heterogeneity1 can be handled in ABM simulations in a manner that is numerically robust (e.g., to singularities, divergences) and, thus, capable of emulating how real biological processes may progress towards potentially different outcomes (i.e., non-deterministic behavior), based on (i) heterogeneity among the unique agents in a population, (ii) stochasticity at the level of individual agents (i.e. inherent variability stemming from differential responses of each individual agent), or (iii) variability in the environment and the coupling of agents to that potentially dynamic environment" 
+
+ABM is a excellent model which does not suffer from asumptions.
 
 
 
+## Snapshot of ML methods
+![[ML_methods_1_Innovations_in_integrating.png]]
 
+![[ML_methods_2_Innovations_in_integrating.png]]
 
-
-
-
+![[ML_methods_3_Innovations_in_integrating.png]]
 
 
 
