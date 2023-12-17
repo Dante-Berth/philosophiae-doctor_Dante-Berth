@@ -48,7 +48,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "tag:#Reinforcement",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -65,7 +65,8 @@
               "state": {}
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "horizontal",
@@ -146,13 +147,13 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8c6408e603711e1a",
+  "active": "980509d1be5b4470",
   "lastOpenFiles": [
-    "agent_based_model_ABM/abs_general/AGENT-BASED MODELING AND SIMULATION.md",
     "agent_based_model_ABM/abs_general/Agent-Based Models.md",
+    "agent_based_model_ABM/abs_general/AGENT-BASED MODELING AND SIMULATION.md",
+    "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
     "agent_based_model_ABM/Figures/ML_methods_3_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures/ML_methods_1_Innovations_in_integrating.png",
-    "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
     "agent_based_model_ABM/Figures/typical_agent_AGENT-BASED MODELING AND SIMULATION.png",
     "agent_based_model_ABM/Figures/ML_methods_2_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures",
