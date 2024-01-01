@@ -1,0 +1,11 @@
+name: studio
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas 
+  - matplotlib 
+  - pyqt 
+  - libxml2 
+  - python 
+  - scipy
