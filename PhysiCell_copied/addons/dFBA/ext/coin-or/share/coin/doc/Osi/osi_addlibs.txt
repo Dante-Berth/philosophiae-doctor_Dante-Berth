@@ -1,0 +1,1 @@
+-LD:/a/coinbrew/coinbrew/dist/lib -lOsi -lCoinUtils -lbz2 -lz -llapack -lblas -lm 
