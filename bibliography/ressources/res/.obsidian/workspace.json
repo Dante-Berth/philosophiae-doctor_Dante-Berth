@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "f702f4a1545aa6b7",
+        "id": "b4107cf916af0b0f",
         "type": "tabs",
         "children": [
           {
-            "id": "2e18e4535230da7c",
+            "id": "06e3083342e01b0e",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -146,32 +146,38 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2e18e4535230da7c",
+  "active": "17d4c2a6ed40cc89",
   "lastOpenFiles": [
+    "agent_based_model_ABM/PhysiCell.md",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_11/codes/hypoxia_final.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_11/codes/hypoxia_base.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_10/codes/ECM_v01.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_06/codes/session06_4.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_06/codes/session06_3.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_06/codes/session06_2.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_07/codes/session07_ws2023_pcdl.md",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_06/codes/session06_1.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_05/codes/session05_4.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_05/codes/session05_3.zip",
+    "ressources_ws2023_PhysiCell_copied/sessions/session_05/codes/session05_4a.zip",
+    "ressources_ws2023_PhysiCell_copied/README.md",
+    "ressources_ws2023_PhysiCell_copied/agenda.md",
+    "myfile.pdf.md",
+    "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
+    "agent_based_model_ABM/Figures/ML_methods_3_Innovations_in_integrating.png",
+    "ws2023_PhysiCell_copied/sessions/session_03/PhysiCell_ws2023_Session03.pdf.md",
+    "[Link.md",
+    "().md",
     "agent_based_model_ABM/abs_medecine/AGENT BASED MODEL complied information.md",
     "agent_based_model_ABM/abs_general/AGENT-BASED MODELING AND SIMULATION.md",
     "agent_based_model_ABM/abs_general/Agent-Based Models.md",
-    "agent_based_model_ABM/PhysiCell.md",
-    "().md",
     "wikipedia.md",
     "7.md",
-    "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
     "agent_based_model_ABM/Figures/ML_methods_1_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures/abs_medecine_agent_modeling_physicell_ws_2023_Session03.png",
-    "agent_based_model_ABM/Figures/ML_methods_3_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures/typical_agent_AGENT-BASED MODELING AND SIMULATION.png",
     "agent_based_model_ABM/Figures/ML_methods_2_Innovations_in_integrating.png",
-    "agent_based_model_ABM/Figures",
     "image-url.md",
-    "Untitled.md",
-    "reinforcement_learning/reinforcement_learning_medicine",
-    "reinforcement_learning/reinforcement_learning_general - Copie",
-    "reinforcement_learning/reinforcement_learning_general",
-    "reinforcement_learning/Nouveau dossier",
-    "reinforcement_learning",
-    "Nouveau dossier",
-    "gene_regulatory_networkd_GRN",
-    "chromatin_network",
-    "agent_based_model_ABM/abs_medecine"
+    "Untitled.md"
   ]
 }
