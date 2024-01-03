@@ -4,16 +4,16 @@
     "type": "split",
     "children": [
       {
-        "id": "0bb471d9e53ca627",
+        "id": "f702f4a1545aa6b7",
         "type": "tabs",
         "children": [
           {
-            "id": "8c6408e603711e1a",
+            "id": "2e18e4535230da7c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
+                "file": "agent_based_model_ABM/PhysiCell.md",
                 "mode": "source",
                 "source": false
               }
@@ -85,7 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
+                "file": "agent_based_model_ABM/PhysiCell.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
+                "file": "agent_based_model_ABM/PhysiCell.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md"
+                "file": "agent_based_model_ABM/PhysiCell.md"
               }
             }
           }
@@ -146,13 +146,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "8c6408e603711e1a",
+  "active": "2e18e4535230da7c",
   "lastOpenFiles": [
+    "agent_based_model_ABM/abs_medecine/AGENT BASED MODEL complied information.md",
     "agent_based_model_ABM/abs_general/AGENT-BASED MODELING AND SIMULATION.md",
     "agent_based_model_ABM/abs_general/Agent-Based Models.md",
+    "agent_based_model_ABM/PhysiCell.md",
+    "().md",
+    "wikipedia.md",
+    "7.md",
     "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
-    "agent_based_model_ABM/Figures/ML_methods_3_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures/ML_methods_1_Innovations_in_integrating.png",
+    "agent_based_model_ABM/Figures/abs_medecine_agent_modeling_physicell_ws_2023_Session03.png",
+    "agent_based_model_ABM/Figures/ML_methods_3_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures/typical_agent_AGENT-BASED MODELING AND SIMULATION.png",
     "agent_based_model_ABM/Figures/ML_methods_2_Innovations_in_integrating.png",
     "agent_based_model_ABM/Figures",

@@ -1,0 +1,1 @@
+The Goal of Physicell is to create a modeling grammar : "a unifying language for modeling diverse biological concepts, transcending the limitations posed by individualized approaches in the realm of agent-based modeling"
