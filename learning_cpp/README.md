@@ -1,0 +1,6 @@
+This file documents my journey toward proficiency in C++. 
+## Daily routine
+I begin by practicing daily exercises from the book titled 'Exercices en langage C++' by Claude Delannoy. After completing these exercises...
+
+## Final goal
+Being proefficient in C++ <=> mastering pytorch and physicell in C++...
