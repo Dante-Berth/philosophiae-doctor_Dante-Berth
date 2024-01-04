@@ -1,15 +1,15 @@
 {
 	"translatorID": "b6d0a7a-d076-48ae-b2f0-b6de28b194e",
+	"translatorType": 4,
 	"label": "ScienceDirect",
 	"creator": "Michael Berkowitz and Aurimas Vinckevicius",
 	"target": "^https?://[^/]*science-?direct\\.com[^/]*/((science/)?(article/|(journal|bookseries|book|handbook)/\\d)|search[?/]|journal/[^/]+/vol)",
 	"minVersion": "3.0",
-	"maxVersion": "",
+	"maxVersion": null,
 	"priority": 100,
 	"inRepository": true,
-	"translatorType": 4,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2021-07-20 00:44:51"
+	"lastUpdated": "2023-12-28 11:30:00"
 }
 
 function detectWeb(doc, url) {
@@ -44,7 +44,7 @@ function detectWeb(doc, url) {
 			return false;
 		}
 	}
-	if (!url.includes("pdf")) {
+	if (!new URL(url).pathname.includes("pdf")) {
 		// Book sections have the ISBN in the URL
 		if (url.includes("/B978")) {
 			return "bookSection";
