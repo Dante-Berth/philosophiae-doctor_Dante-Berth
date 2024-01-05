@@ -4,7 +4,7 @@ using namespace std;
 #include <math.h>
 int main()
 {
-    int n(pow(10,8));
+    int n(pow(10,9));
     int i = 1;
     clock_t t;
     double harmonic(0);

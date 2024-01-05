@@ -1,5 +1,5 @@
 import time
-n = pow(10,8)
+n = pow(10,9)
 harmonic_sum = 1
 begin_time = time.time()
 for i in range(2,n+1):
