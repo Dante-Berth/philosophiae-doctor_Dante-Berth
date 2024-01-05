@@ -1,15 +1,15 @@
 {
 	"translatorID": "ecddda2e-4fc6-4aea-9f17-ef3b56d7377a",
+	"translatorType": 12,
 	"label": "arXiv.org",
 	"creator": "Sean Takats and Michael Berkowitz",
 	"target": "^https?://([^\\.]+\\.)?(arxiv\\.org|xxx\\.lanl\\.gov)/(find|catchup|list/\\w|abs/|pdf/)",
 	"minVersion": "3.0",
-	"maxVersion": "",
+	"maxVersion": null,
 	"priority": 100,
 	"inRepository": true,
-	"translatorType": 12,
 	"browserSupport": "gcsibv",
-	"lastUpdated": "2022-05-12 01:25:32"
+	"lastUpdated": "2024-01-05 12:45:00"
 }
 
 /*
@@ -111,7 +111,7 @@ function doWeb(doc, url) {
 			
 			var urls = [];
 			for (var id in items) {
-				urls.push('http://export.arxiv.org/oai2'
+				urls.push('https://export.arxiv.org/oai2'
 					+ '?verb=GetRecord&metadataPrefix=oai_dc'
 					+ '&identifier=oai%3AarXiv.org%3A' + encodeURIComponent(id)
 				);
@@ -137,7 +137,7 @@ function doWeb(doc, url) {
 		}
 		if (!id) throw new Error('Could not find arXiv ID on page.');
 		id = id.trim().replace(/^arxiv:\s*|v\d+|\s+.*$/ig, '');
-		var apiurl = 'http://export.arxiv.org/oai2?verb=GetRecord&metadataPrefix=oai_dc'
+		var apiurl = 'https://export.arxiv.org/oai2?verb=GetRecord&metadataPrefix=oai_dc'
 			+ '&identifier=oai%3AarXiv.org%3A' + encodeURIComponent(id);
 		ZU.doGet(apiurl, parseXML);
 	}

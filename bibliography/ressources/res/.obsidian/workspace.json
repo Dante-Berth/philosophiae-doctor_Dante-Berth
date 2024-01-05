@@ -128,8 +128,17 @@
                 "file": "reinforcement_learning/reinforcement_learning_general/Reinforcement learning algorithms A brief survey.md"
               }
             }
+          },
+          {
+            "id": "933590ed1fe52063",
+            "type": "leaf",
+            "state": {
+              "type": "advanced-tables-toolbar",
+              "state": {}
+            }
           }
-        ]
+        ],
+        "currentTab": 3
       }
     ],
     "direction": "horizontal",
@@ -143,13 +152,20 @@
       "canvas:Create new canvas": false,
       "daily-notes:Open today's daily note": false,
       "templates:Insert template": false,
-      "command-palette:Open command palette": false
+      "command-palette:Open command palette": false,
+      "table-editor-obsidian:Advanced Tables Toolbar": false
     }
   },
   "active": "08eb6fcd420330f1",
   "lastOpenFiles": [
-    "().md",
+    "reinforcement_learning/Figures/Value iteration for estimating the best policy.png",
+    "reinforcement_learning/Figures/Policy Iteration for estimating the best policy.png",
     "reinforcement_learning/reinforcement_learning_general/Reinforcement learning algorithms A brief survey.md",
+    "reinforcement_learning/Figures/Generalized Policy Iteration Scheme.png",
+    "reinforcement_learning/Figures/Iterative Policy Evalutation.png",
+    "reinforcement_learning/Figures",
+    "reinforcement_learning/Nouveau dossier",
+    "().md",
     "agent_based_model_ABM/abs_medecine/Innovations in Integrating Machine Learning and Agent-Based Modeling of Biomedical Systems.md",
     "agent_based_model_ABM/abs_medecine/Agent based model complied information.md",
     "ressources_ws2023_PhysiCell_copied/README.md",
@@ -165,8 +181,6 @@
     "ressources_ws2023_PhysiCell_copied/sessions/session_07/codes/session07_ws2023_pcdl.md",
     "ressources_ws2023_PhysiCell_copied/sessions/session_06/codes/session06_1.zip",
     "ressources_ws2023_PhysiCell_copied/sessions/session_05/codes/session05_4.zip",
-    "ressources_ws2023_PhysiCell_copied/sessions/session_05/codes/session05_3.zip",
-    "ressources_ws2023_PhysiCell_copied/sessions/session_05/codes/session05_4a.zip",
     "ressources_ws2023_PhysiCell_copied/agenda.md",
     "myfile.pdf.md",
     "agent_based_model_ABM/Figures/ML_methods_3_Innovations_in_integrating.png",
