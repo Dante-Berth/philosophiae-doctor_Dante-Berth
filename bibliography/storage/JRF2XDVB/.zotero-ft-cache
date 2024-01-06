@@ -1,0 +1,1219 @@
+STATISTICS IN MEDICINE Statist. Med. 2009; 28:3294–3315 Published online 11 September 2009 in Wiley InterScience (www.interscience.wiley.com) DOI: 10.1002/sim.3720
+
+Reinforcement learning design for cancer clinical trials
+Yufan Zhao, Michael R. Kosorok∗,† and Donglin Zeng
+Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, U.S.A.
+
+SUMMARY
+We develop reinforcement learning trials for discovering individualized treatment regimens for lifethreatening diseases such as cancer. A temporal-difference learning method called Q-learning is utilized that involves learning an optimal policy from a single training set of ﬁnite longitudinal patient trajectories. Approximating the Q-function with time-indexed parameters can be achieved by using support vector regression or extremely randomized trees. Within this framework, we demonstrate that the procedure can extract optimal strategies directly from clinical data without relying on the identiﬁcation of any accurate mathematical models, unlike approaches based on adaptive design. We show that reinforcement learning has tremendous potential in clinical research because it can select actions that improve outcomes by taking into account delayed effects even when the relationship between actions and outcomes is not fully known. To support our claims, the methodology’s practical utility is illustrated in a simulation analysis. In the immediate future, we will apply this general strategy to studying and identifying new treatments for advanced metastatic stage IIIB/IV non-small cell lung cancer, which usually includes multiple lines of chemotherapy treatment. Moreover, there is signiﬁcant potential of the proposed methodology for developing personalized treatment strategies in other cancers, in cystic ﬁbrosis, and in other life-threatening diseases. Copyright q 2009 John Wiley & Sons, Ltd.
+KEY WORDS: adaptive design; clinical trials; dynamic treatment regime; extremely randomized trees; multistage decision problems; non-small cell lung cancer; reinforcement learning; optimal policy; support vector regression
+
+1. INTRODUCTION
+Discovering effective therapeutic regimens for life-threatening diseases is one of the central goals of medical research. Finding powerful and general methodologies for accomplishing this discovery is a major challenge. The prevailing approach is to develop candidate therapies in the laboratory
+
+∗Correspondence to: Michael R. Kosorok, Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, U.S.A.
+†E-mail: kosorok@unc.edu
+Contract/grant sponsor: U.S. National Cancer Institute; contract/grant number: CA075142 Contract/grant sponsor: Center for Innovative Clinical Trials at the UNC Gillings School of Global Public Health
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Received 4 November 2008 Accepted 29 July 2009
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3295
+
+using basic science and then to test those therapies in animals and then in human clinical trials. A major problem is that very few candidate treatments make it to human clinical trials and only about 10 per cent of treatments making it to human clinical trials demonstrate enough efﬁcacy to be approved for marketing [1, 2]. Typical regimens for patients with certain advanced cancers (such as breast cancer, lung cancer, and ovarian cancer) utilize a single agent in combination with some platinum-based compound, and consist of multiple stages of treatment (especially when relapse is common). For example, many studies demonstrate that three lines of treatment can improve survival for patients with advanced nonsmall cell lung cancer (NSCLC). For patients who present with a good performance status and stage IIIB/IV disease, platinum-based chemotherapy is the primary treatment that can offer a modest survival advantage over best supportive care alone. Approximately 40–50 per cent of patients in recent ﬁrst-line trials received second-line treatment. Some patients who maintain a good performance status and tolerate therapy without signiﬁcant toxicities will receive third-line therapy [3].
+A widely used approach is to give a maximum dosage of chemotherapy drug for some period of time, followed by a period of recuperation in which no drug is given. Although this therapeutic regimen can be easily clinically implemented, this may not be the best strategy for minimizing tumor burden. Such problems have motivated the vast literature on drug-scheduling strategies. In the past few years, there has been extensive research on applications of adaptive design to clinical trials. Many investigators have developed various adaptive designs to efﬁciently identify clinical beneﬁts of the treatment, and demonstrated that conducting adaptive designs can be very promising in clinical development. In general, adaptive designs for multiple courses of chemotherapy allow modiﬁcation of randomization schedules based on varied probabilities of treatment assignment in order to increase the probability of success. In choosing treatments for successive courses, one of the popular adaptive designs to do this is the play-the-winner-and-drop-the-loser design, which repeats a treatment that is successful in a given course or otherwise switches to a different treatment. Thall et al. [4] provided a statistical framework for multicourse clinical trials involving some modiﬁcations of the play-the-winner-and-drop-the-loser strategy. In their proposed design, all treatments after the ﬁrst course are assigned adaptively, thus increasing the amount of information available per patient. Thall et al. [5] presented a Bayesian adaptive design for a trial comparing twocourse strategies for treating metastatic renal cancer. Each patient is fairly randomized between two treatments at enrollment, and if a patient suffers disease progression (s)he is then re-randomized among three treatments not given initially. One of the common features of these adaptive designs is the use of parametric models accounting for efﬁcacy, toxicity, or time to some events (such as survival time). By deﬁning a probability model, it is easy to study the design’s operating characteristics under a range of parameterizations and clinical scenarios. However, as a result, it will lead to all individuals being assigned to the same level and type of treatment. Therefore, the limitation is not only to ignore the heterogeneity in treatment across individuals, but also to unsuccessfully incorporate the heterogeneity needed for optimal individualized treatment across time.
+In addition to the challenge of taking into account accrued information in clinical trial designs, another major challenge is the examination of the long-term beneﬁt of treatment due to delayed effects. If we consider the larger context of the overall therapeutic strategy, in many clinical settings a regimen with a lower initial response rate still can be the best choice in the long run. This is quite plausible due to the potential for the regimen’s comparatively better delayed clinical beneﬁt. For ﬁnding new treatment regimens with this motivation, one of the most promising approaches has been referred to variously as ‘dynamic treatment regimes’ or ‘adaptive treatment strategies’ [6].
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3296
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+In contrast to the classic adaptive designs, dynamic treatment regimes can allow dosage level and type to vary with time for subject-speciﬁc needs. As a consequence, the optimal strategy is able to provide information not only on the best treatment choice from the beginning but also treatment choices that maximize outcomes for a later time. Dynamic treatment regimes are recently emerging as a new paradigm for the treatment and long-term management of the chronic disease, and they have been utilized in some trials such as sequential multiple assignment randomized trials (SMART) [6] and drug and alcohol dependency studies [7]. However, to date, there are no clinical trial methodologies for discovering new treatment regimens for life-threatening diseases. Thus, for diseases like cancer, the use of clinical trials for evaluation and not discovery remains the prevailing paradigm.
+In this paper, we present a general reinforcement learning framework and related statistical and computational methods for use in the clinical research arena. Reinforcement learning has been applied to treating behavioral disorders, where each patient typically has multiple opportunities to try different treatments [8]. Murphy et al. [9] suggest Q-learning, which is one of the most important breakthroughs in reinforcement learning, for constructing decision rules for chronic psychiatric disorders, as these chronic conditions often require sequential decision making to achieve the best clinical outcomes. Moreover, reinforcement learning has been successfully applied to the segmentation of the prostate in transrectal ultrasound images. Owing to its use of knowledge obtained from the previous input image, the reinforcement learning algorithm is potentially capable of ﬁnding the appropriate local value for subimages and extracting the prostate image [10]. However, reinforcement learning has not yet been applied to life-threatening diseases like cancer where individual patients do not have the luxury to try many different treatments. Our main aim is to illustrate the application of these methods to the discovery of new treatment regimens for life-threatening diseases such as cancer. This is a paradigm shift from the standard clinical trial framework that is used for evaluating treatments but not for discovery. We consider trials in which each patient is randomized among a set of treatments at each stage and this treatment set consists of a continuous range of possibilities including, for example, a continuous range of dose levels. Therefore, rather than being constrained to a ﬁnite list of prespeciﬁed treatments, our method allows for more general multiplicities of treatments that may include a continuum of possibilities at each stage. Reinforcement learning design has two attractive features that make it a useful tool for extracting optimal strategies directly from clinical data. First, without relying on the identiﬁcation of any accurate mathematical models, it carries out treatment selection sequentially with time-dependent outcomes to determine which of several possible next treatments is best for which patients at each decision time. This feature not only helps us to account for heterogeneity in treatment across individuals, but also possibly captures the best individualized therapies even when the relationship between treatments and outcomes is not fully known. Second, in contrast to focusing on short-term beneﬁts, the proposed approach improves longer-term outcomes by considering delayed effect of treatments. Furthermore, we ﬁnd that reinforcement learning design can extract the optimal treatment strategies while taking into account a drug’s efﬁcacy and toxicity simultaneously, which is supported by our simulation studies.
+The remainder of this paper is organized as follows. In Section 2, we provide a detailed description of reinforcement learning and Q-learning. Two methods for estimating Q-functions, support vector regression (SVR) and extremely randomized trees (ERT), are presented in Section 3. The proposed ‘clinical reinforcement trial’ method is presented in Section 4. In Section 5, we describe extensive simulation studies we conducted to discover individualized optimal treatment
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3297
+
+strategies. In Section 6, we conclude with a brief discussion that includes an important future application to NSCLC.
+
+2. REINFORCEMENT LEARNING BACKGROUND
+Our goal in this section is to introduce reinforcement learning theory, speciﬁcally, Q-learning, which will be used to discover individualized optimal therapies in cancer clinical trials.
+
+2.1. Reinforcement learning
+Over the last few decades, machine learning has become an active branch of artiﬁcial intelligence. Some of the ﬁelds studied in machine learning involve stochastic sequential decision processes, commonly referred to as reinforcement learning methods. The term ‘reinforcement’ is subject to the occurrence of an event, in the proper relation to a response, that tends to increase the probability that the response will occur again in the same situation. From a computer science perspective, reinforcement learning is the ﬁrst ﬁeld to address the computational issues that arise when learning from interaction with an environment in order to achieve long-term goals. A detailed account of the history of reinforcement learning is given in Sutton and Barto [11].
+The basic process of reinforcement learning involves trying a sequence of actions, recording the consequences of those actions, statistically estimating the relationship between actions and consequences, and then choosing the action that results in the most desirable consequence. In our reinforcement learning design, the thing a patient interacts with is called the ‘environment’, which may indicate the complex system consisting of the human body and more sources of error and greater restrictions on what can be measured. While these interactions continually happening, we choose a sequence of actions applied to the patient and the environment responds to those actions and provides feedback. To be speciﬁc, we use S and A to denote random variables, where S represents the set of environmental ‘states’ and A represents the set of possible ‘actions’. Here ‘states’ may represent individual patient covariates and ‘actions’ can be denoted by various treatments or dose levels. Both variables can be discrete or continuous. Deﬁne time-dependent variables St = {S0, S1, . . . , St }, and similarly, deﬁne At = { A0, A1, . . . , At }. We also deﬁne states to possibly include past actions (i.e. St can include At−1). We use lower case letters, such as s and a, to denote the realized values of the random variables S and A, respectively. In addition, for convenience, we deﬁne st = {s0, s1, . . . , st }, and similarly, at = {a0, a1, . . . , at }. We assume that the ﬁnite longitudinal trajectories are sampled at random according to a distribution P. This distribution is composed of the unknown distribution of each St conditional on previous (St−1, At−1). We denote these unknown conditional densities as { f0, . . . , fT }, and denote expectations with respect to the distribution P as E.
+As a consequence of a patient’s treatment, after each time step t, the patient receives a numerical reward rt . This could be denoted as a function (possibly random), which maps to a single number the key elements: current state st , action at , and next state st+1. When t = 0, 1, . . . , T , the reward is given by
+
+rt = R(st , at , st+1)
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3298
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+We also deﬁne random variable Rt = R(St , At , St+1). Reinforcement learning is learning what to do, how to map situations from state space S to action space A, and depending on what our goal
+is how to choose at to maximize or minimize the expected discounted return:
+
+T −t
+
+r˜t = rt + rt+1 + 2rt+2 +· · ·+ T rt+T =
+
+k rt +k
+
+k=0
+
+In this equation, is the discount rate (0 1). We can interpret as a control to balance a
+patient’s immediate reward and future rewards. As approaches 1, we take future rewards into account more strongly. In the extreme case, where = 1, we fully maximize or minimize rewards over the long run.
+Another key element of a reinforcement learning system is an exploration ‘policy’, p, which maps (st , at−1) to the probability pt (a|st , at−1) (the probability that action a is taken given history {st , at−1}). If the policy is possibly non-stationary and non-Markovian but deterministic, we denote
+t (st , at−1) = at . In other words, policy t , as a sequence of decision rules { 1, . . . , T }, is an action. Let the distribution P denote the distribution of training data when the policy is used to
+generate actions. We can then denote expectations with respect to the distribution P by E . Let denote the collection of all policies. Thus the expectations E range over ∈ . For simplicity
+and without loss of generality, we mainly concentrate in this paper on the goal of discovering
+that treatment can yield a maximized reward for a given patient. Hence, seeking the policy that
+maximizes the expectations with respect to the sum of the rewards over the time trajectories is our
+ultimate goal. To accomplish this, a ‘value function’ is established as a function of a state. Based on the condition of history st , the value function represents the total amount of reward a patient can expect to accumulate over the future. That is,
+
+T −t
+
+Vt (st ) = E
+
+k Rt+k |St = st
+
+k=0
+
+According to this, the optimal value function can be simply deﬁned as
+
+Vt∗(st
+
+)
+
+=
+
+max
+∈
+
+Vt
+
+(st
+
+)
+
+=
+
+max
+∈
+
+E
+
+T −t
+k Rt+k |St = st
+k=0
+
+Efﬁciently estimating the optimal value function is the most important component of almost all
+reinforcement learning algorithms. As a fundamental property of value functions used throughout
+reinforcement learning is that they satisfy particular recursive relationships such as the Bellman equation [12], it is clear that the optimal policy, ∗, must satisfy,
+
+∗ t
+
+(st
+
+)
+
+∈
+
+arg
+
+max
+at
+
+E
+
+[
+
+Rt
+
++
+
+Vt∗+1(St+1) | St = st , At = at ]
+
+Modern techniques in mathematical and computational areas have stimulated the developments of many methods for estimating the optimal value functions or optimal policies. Many of the existing methods can be categorized into one of the following two classes: dynamic programming or Monte Carlo method [11]. Bellman [12] ﬁrst provided the ‘dynamic programming’ term to show how these methods are useful to a wide range of problems. Minsky [13] ﬁrst described the connection between dynamic programming and reinforcement learning. In classical dynamic
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3299
+
+programming methods, policy evaluation and policy improvement [12, 14] refer to the computation of the value function and the improved policy, respectively. The computation in both methods requires an interactive process. Combining these two methods together, we obtain two other methods called policy iteration and value iteration [15, 16]. Although dynamic programming can be applied to many types of problems, it is restricted to solving reinforcement learning problems under the Markov assumption. If this assumption is violated, dynamic programming may not be able to ﬁnd an exact solution. Additionally, dynamic programming for solving reinforcement learning problems requires knowledge of a complete and accurate model of the environment. This is almost always unrealistic in clinical settings due to the heterogeneity in the model across individual patients.
+
+2.2. Q-learning
+
+Although the value function plays a fundamental role in reinforcement learning, it is usually not possible to directly compute an optimal policy by just solving the Bellman optimality equation, even if we have a complete and accurate model of the environment’s dynamics. Sutton [17] claims that the temporal-difference (TD) learning is an alternative method to ﬁnd optimal policies without any knowledge of the dynamic model. One fundamental expression of TD-learning is the incremental implementation. Compared with the Monte Carlo methods, TD-learning requires less memory for estimates and less computation. Almost any TD-learning belongs to the ‘eligibility traces’ problem. For more details on this issue, see Sutton and Barto [11] and Kaelbling et al. [18].
+One of the most important off-policy TD-learning methods is Watkins’ Q-learning [19, 20]. Q-learning does not estimate the value function directly; it estimates a Q-function instead. Q-learning handles discounted inﬁnite-horizon Markov decision processes (MDP). It requires no prior knowledge, is exploration insensitive, and easy to implement, and is so far one of the most popular and seems to be the most effective model-free algorithm for learning from delayed reinforcement. In the setting where we do not have any information about the transition function or the probability distribution of the random variables, such a model-free method can be used to ﬁnd optimal strategies from the unknown system. The motivation of Q-learning is that once the Q functions have been estimated, it is only necessary to know the state to determine the best action. From a statistical perspective, the optimal time-dependent Q-function is
+
+Q∗t (st , at ) = E[Rt + Vt∗+1(St+1) | St = st , At = at ]
+
+Note that since
+
+Vt∗
+
+(st
+
+)
+
+=
+
+max
+at
+
+Q∗t (st
+
+,
+
+at
+
+)
+
+it is relatively easy to determine an optimal policy, which satisﬁes
+
+∗ t
+
+(st
+
+)
+
+=
+
+arg
+
+max
+at
+
+Q∗t (st
+
+,
+
+at
+
+)
+
+One-step Q-learning has the simple recursive form
+
+Qt (st , at ) = E
+
+Rt +
+
+max
+at +1
+
+Q t +1 (St +1 ,
+
+at +1 )
+
+|
+
+St
+
+=
+
+st
+
+,
+
+At
+
+=
+
+at
+
+(1)
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3300
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+In learning a non-stationary non-Markovian policy with one set of ﬁnite horizon trajectories (also called a training data set)
+
+{S0, A0, R0, S1, A1, R1, . . . , AT , RT , ST +1}
+
+we denote the estimator of the optimal Q-functions based on this training data by Qt , where t = 0, 1, . . . , T . According to the recursive form of Q-learning in (1), we must estimate Qt backwards through time t = T, T −1, . . . , 1, 0, that is, use the estimates beginning at the last time point QT
+recursively back to Q0 at the beginning. For convenience we set QT +1 equal to 0. In order to estimate each Qt , we denote Qt (st , at ; ) as a function of a set of parameters , and we allow the estimator to have different parameter sets for different time points t. For example, Qt (st , at ; )
+may be of the form
+
+k
+Qt (st , at ; t ) = t j 
+t j (st , at )
+j =1
+
+where t = ( t1, . . . , tk) and {
+t1, . . . , 
+tk} are selected basis functions. Once the backwards estimation process is done, we save the sequence of {Q0, Q1, . . . , QT } for estimating optimal policies
+
+t
+
+=
+
+arg
+
+max
+at
+
+Qt
+
+(st
+
+,
+
+at
+
+;
+
+t)
+
+where t = 0, 1, . . . , T , and we thereafter use these optimal policies to test or predict for a new data set.
+There are many other promising learning methods based on modiﬁcations or extensions of Q-learning, for example, Blatt et al. (Unpublished manuscript, 2004) proposed A-learning. However, some properties of these methods have not yet been carefully investigated. Owing to the simple equations and minimal amount of computation, we restrict our attention in this paper to Q-learning for discovering effective therapeutic regimens in our clinical trial settings.
+
+3. GENERAL METHODOLOGY
+
+In this section, our main aim is to estimate the Q-function for ﬁnding the corresponding optimal policy. However, challenges may arise due to the complexity of the structure of the true Q-function, including the nonsmooth maximization operation in equation (1), the high-dimension of the states variable S, the high-dimension of the action variable A, or having the action variable be continuous. In order to obtain the estimator of interest, many authors have considered different approaches in recent years. Murphy [21], Blatt et al. (Unpublished manuscript, 2004) and Tsitsiklis and Van Roy [22] showed that Q-learning estimation can be viewed as approximate least-squares value iteration. The parameter estimators t for the t-th Q-function satisfy
+
+2
+
+t ∈ arg min En
+
+Rt
+
++
+
+max
+at +1
+
+Q
+
+t
+
++1(St
+
++1
+
+,
+
+at
+
++1;
+
+t+1)− Qt (St , At ;
+
+)
+
+where En is the empirical expectation. This is consistent with the one-step update of Sutton and Barto [11] with = 1, and furthermore, it is general enough to permit function approximation and
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3301
+
+nonstationary Q-functions. Another simple and standard estimating form is provided by Murphy et al. [9]. They claim that Q-learning is a generalization of the familiar regression model. When the dimension of the action space is small, linear regression methods can sometimes be adequate; but, more generally, quadratic regression or higher-order regression is desirable for estimating the Q-function. In this paper we apply two recent ﬂexible techniques from the machine learning literature, SVR and ERT, as our main methods to ﬁt Q-functions and to learn an optimal policy using a training data set.
+
+3.1. Support vector regression
+The ideas underlying SVR [23] are similar but slightly different from SVM [24] within the margin-based classiﬁcation scheme. The data xi are mapped into a feature space by a nonlinear transformation , which guarantees that any data set becomes arbitrarily separable as the data dimension grows [25], then a hyperplane f (x) is ﬁtted to the mapped data. One of the popular loss functions involved in SVR is known as the -insensitive loss function, which is deﬁned as L( f (xi ), yi ) = (| f (xi )− yi |− )+, >0 [24]. Other possible loss functions include quadratic loss, Laplace loss, and Huber loss. In Q-learning, given training data {(xi , yi ) ∈ X ×Y }in=1, the variable X may be replaced by {S, A} that represents states and actions information, and we deﬁne attributes xit ∈ St ×At , where i = 1, . . . , n, t = 0, . . . , T, St = {S0, S1, . . . , St } and At = {A0, A1, . . . , At }; the variable Y may be replaced by the numerical rewards, and we assign the label index yit to each total future reward value rˆit . The hyperplane f (x) is equivalent to the Q-function.
+To ﬁt the Q-functions, let f (x) = wT (xi )+b. Then SVR solves the optimization problem:
+
+min
+w,b, ,
+
+1 2
+
+w
+
+n
+2+C (
+i =1
+
+i+
+
+i)
+
+subject to (wT (xi )+b)− yi + i
+
+(2)
+
+yi −(wT (xi )+b) + i
+
+i , i 0, i = 1, . . . , n
+
+where is the width of the tube, i and i are slack variables, and C is the cost of error. C is also
+
+called the tuning parameter in the machine learning ﬁeld and is determined by cross validation.
+
+By minimizing the regularization term
+
+1 2
+
+w
+
+2 as well as the training error C
+
+in=1( i + i ), SVR
+
+can avoid both overﬁtting and underﬁtting the training data. The slack variables i and i allow
+
+for some data points in the feature space to stay outside the conﬁdence band determined by . In
+
+other words, the goal is to ﬁnd a function that has at most deviation from the actually obtained
+
+targets yi for all the training data. Errors with deviation larger than are not acceptable. A class of functions called kernels K : Rm ×Rm → R such that K (xi , x j ) = (xi )T (x j ) (for example, the Gaussian kernel is K (xi , x j ) = exp (− xi −x j 2)) are used in SVR to guarantee that any data set
+
+becomes arbitrarily separable as the data dimension grows. As the SVR function is derived within
+
+this reproducing kernel Hilbert space (RKHS) context, the explicit knowledge of both and w are
+
+not needed if we have information regarding K . In this case, problem (2) is equivalent to solving
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3302
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+an optimization dual problem equipped with Lagrange multipliers i :
+
+min
+k,k
+subject to
+
+1 2
+
+(k
+
+−
+
+k
+
+)T
+
+K
+
+(xi
+
+,
+
+x
+
+j
+
+)(k
+
+−
+
+k
+
+)
+
++
+
+n
+(
+i =1
+
+i+
+
+n
+i )+ yi (
+i =1
+
+i−
+
+i)
+
+n
+( i − i ) = 0, 0 i , i C, i = 1, . . . , n
+i =1
+
+Once the above formulation is solved to get the optimal i and i , the approximating function at x is given by:
+
+n
+f (x) = ( i − i )K (xi , x)+b
+i =1
+Similar to SVM that calculates a hyperplane, the solution of an SVR function only depends on the support vectors [26]. Usually support vectors just represent a small fraction of the sample; therefore, the evaluation of the decision function is computationally efﬁcient. This attractive property is especially useful when dealing with data sets with a low ratio of sample size to dimension. To achieve good performance by using SVR, some procedures such as data scaling, kernel and related parameter selection need to be examined very carefully. We discuss these procedures in more detail in the simulation studies below.
+Compared with least-squares regression where is always zero, SVR is a more general and ﬂexible approach for regression problems. There are several examples where SVR is successfully used in practice, and they generally perform better than other regression methods. See Chen et al. [27] and Smola and Scholkopf [28]. For a detailed exposition with a more computational discussion about SVR, refer to LIBSVM [29], which is a library for SVM.
+
+3.2. Extremely randomized trees
+The complex and unclear structure of the Q-function has also partly motivated the vast literature on nonparametric statistical methods and machine learning. Ernst et al. [30] and Geurts et al. [31] proposed an ERT method, which is called the Extra-Trees algorithm, for batch mode reinforcement learning. Unlike the classical classiﬁcation and regression trees, such as the Kd-tree or the pruned CART tree, this nonparametric method builds a model in the form of the average prediction of an ensemble of regression trees (called a random forest). Moreover, each tree built by this algorithm consists of strongly randomizing both attribute and cut-point choice while splitting a tree node. In addition to the number of trees G, this method depends on one parameter, called K , the maximum number of cut-direction tests at each node, and nmin, the minimum number of elements at each leaf required to split a node. The choice of an appropriate value of G depends on the resulting compromise between computational requirements and prediction accuracy. K determines the strength of the randomization: for example, for K = 1, the splits are chosen totally independent of the output variable. A larger nmin yields smaller trees but higher bias. The ERT algorithm builds G trees using the training data set. To determine a test at a node for each tree, this algorithm randomly selects K attributes with K randomized cut-points. A score is calculated for each test and then the one that has the highest value is kept. The algorithm stops splitting a node when the number of elements in the node is less than nmin. The complete ERT algorithm is given in the Appendix of Geurts et al. [31].
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3303
+
+Compared with the standard tree-based regression methods, ERT successfully leads to significant improvements in precision. Additionally, it can dramatically decrease variance while at the same time decreasing bias, and it is very robust to outliers. ERT has been recently demonstrated in a simulation of HIV infection [32] and adaptive treatment of Epilepsy [33]. While this algorithm reveals itself to be very effective to extract a well-ﬁtted Q from the data set, it has one drawback: the computational efﬁciency is relatively low especially with increasing numbers of patients in the training data set.
+
+4. CLINICAL REINFORCEMENT TRIALS
+
+In this section, we propose a new design and analysis method for a new kind of clinical trial for life-threatening diseases, ‘clinical reinforcement trials’. The design for these trials consists of three aspects:
+First, a ﬁnite, reasonably small set of decision times is identiﬁed. These times could be either speciﬁc time points measured from trial onset or decision points in the treatment process such as the starting times of each new line of cancer treatment. For example, in the following simulation study, we create a synthetic cancer treatment setting where patients are monitored monthly for 6 months and treatment for each month is determined based on patient biomarker values available at the beginning of the month. As a second example, in NSCLC, it may be more appropriate to have one decision time at the beginning of the ﬁrst-line of treatment, a second decision time at the beginning of the second-line of treatment, and possibly a third decision time at the beginning of the third-line of treatment. The third-line is currently only available for certain patients and there is only one FDA-approved third-line treatment, and so decision possibilities are severely limited at the third decision time for this example. Note that the decision time, in this instance, is really a stage of treatment and not a calendar time. Other decision time sets, including hybrid variants of the previous two examples, are also possible.
+Second, for each decision time, a set of possible treatments to be randomized is identiﬁed. The choice of treatments can be a continuum as mentioned earlier or a ﬁnite set and can include restrictions that may be functions of observed variables such as biomarkers. For example, in our simulations we restrict the dose of chemotherapy at the ﬁrst decision time to be above a threshold so that all patients are guaranteed some initial treatment. When the set of treatments is ﬁnite, the proposed design reduces to a SMART design.
+Third, a utility function is identiﬁed that can be assessed at each time point and contains an appropriately weighted combination of outcomes available at each interval between decision times and at the end of the ﬁnal treatment interval. In our following simulation study, we use a combination of tumor size and overall patient health as our utility function.
+We now brieﬂy describe how a study using the proposed method would be conducted. First, a clinical reinforcement trial addressing the targeted clinical disease is designed using the principles described previously. This may require developing a virtual patient model as we do in the next section. Once a design has been determined, patients are then recruited into the study and randomized to the treatment set under the protocol restrictions at each decision point, outcome measures used to compute patient state and utility are obtained, and each patient is followed through to completion of the protocol or until the end of the trial. The patient data are collected and Q-learning is applied, in combination with either SVR or ERT applied at each time point as described above, to estimate the optimal treatment rule as a function of patient variables and biomarkers, at each
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3304
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+decision time. We allow the Q-functions to differ from decision time to decision time. This yields an individualized, time varying treatment rule that can be signiﬁcantly better than the standard of care, although it may be important to validate this treatment regime in an additional phase III clinical trial. We will show in the following simulation study below that our proposed approach is able to generate treatment rules that lead to improved patient outcomes. One open question that we will pursue in a later paper is how to determine sample size mathematically. Fortunately, it appears from our simulation studies that the sample sizes required are similar to and not larger than the sizes required for typical phase III trials.
+
+5. SIMULATION STUDIES
+
+We simulate a sequentially randomized clinical reinforcement trial as a numerical example to examine the performance of the proposed design and analysis methodology. To demonstrate that the optimal therapy found using Q-learning is superior to any other regimens, the treatments at each course are speciﬁed in terms of a continuum of dose levels of a single drug, and the comparisons we consider are between the optimal regimen identiﬁed from our proposed clinical reinforcement trial procedure and various constant-dose regimens. We ﬁrst present a simple mathematical model for disease and chemotherapy, which we will be using for our study. We then present the speciﬁc implementation of Q-learning, which we will use for the simulation. This section concludes with a presentation of the results of the simulation study.
+
+5.1. Simple chemotherapy mathematical model
+To construct a set of training data reﬂecting a hypothetical cancer trial, we need a simple chemotherapy mathematical model to generate virtual patients and virtual clinical trial data. The goal for such a chemotherapy mathematical model is to allow for sufﬁcient complexity so that the model will qualitatively generate clinically observed in vivo tumor growth patterns, while simultaneously maintaining sufﬁcient simplicity to admit analysis. Thus, the model we present must exhibit: (1) tumor growth in the absence of chemotherapy; (2) patients’ negative wellness outcomes in response to chemotherapy; (3) the drug’s capability for killing tumor cells while also increasing toxicity; and (4) an interaction between tumor cells and patient wellness. To obtain data that satisfy these requirements, we propose using a system of ordinary difference equations (ODE) modeled as follows:
+W˙ t = a1(Mt ∨ M0)+b1(Dt −d1) (3)
+M˙ t = [a2(Wt ∨ W0)−b2(Dt −d2)]×1{Mt >0}
+where time (with month as unit) t = 0, 1, . . . , T −1, and W˙ t and M˙ t indicate transition functions. Note that these changing rates yield a piecewise linear model over time. Without loss of trade-off between toxicity and efﬁcacy, the piecewise linear model can be implemented very easily. For simplicity, we here consider tumor size instead of number of tumor cells. Mt denotes the tumor size at time t, M0 indicates the value of tumor size when the patient is at the beginning of the study. Wt measures the negative part of wellness (toxicity); similarly, W0 indicates the initial value of patient’s wellness. Dt denotes the chemotherapy agent dose level. The value of other different parameters for the model are ﬁxed as: a1 = 0.1, a2 = 0.15, b1 = 1.2, b2 = 1.2, d1 = 0.5,
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3305
+
+and d2 = 0.5. The indicator function term 1{Mt >0} in (3) represents the feature that when the tumor size is absorbed at 0, the patient has been cured, and there is no future recurrence of the tumor. Note that this model is not meant to reﬂect a speciﬁc cancer but to reﬂect a generic plausible cancer created for illustration.
+Before generating simulated clinical data, it is easy to notice that the dynamic model has two state variables (Wt , Mt ) and one action (treatment) variable (Dt ). The state variables can be obtained via:
+Wt+1 = Wt + W˙ t
+Mt+1 = Mt + M˙ t
+where t = 0, 1, . . . , T −1 are the T decision times we will utilize in our simulated trial design. We generate a simulated clinical reinforcement trial with N = 1000 patients (replicates) with each simulated patient experiencing 6 months (T = 6) of treatment based on this ODE model. The initial values W0 and M0 for each patient are generated from independent uniform (0, 2) deviates. The treatment set consists of doses of a chemotherapy agent with an acceptable dose range of [0, 1], where the value 1 corresponds to the maximum acceptable dose. The values chosen for chemotherapy drug level D0 are simulated from the uniform (0.5, 1) distribution; moreover, D1, . . . , D5 are drawn according to a uniform distribution in the interval (0, 1). Thus, our treatment set is restricted differently at decision time t = 0 than at other decision times to reﬂect a requirement that patients receive at least some drug at onset of treatment. Various other distribution settings for the action space are possible, and clinical researchers have tremendous ﬂexibility in utilizing this approach.
+Figure 1 provides a disease progression example of one patient to show dynamic treatment results with inﬂuence of different levels of chemotherapy agent. The system is clearly sensitive to the chemotherapy dosing regimen. Note that when the dose level switches to low, the tumor size grows to a dangerous level. Moreover, the toxicity increases (decreases) once the dosage is changed to a higher (lower) level. Note that in this model we have taken a simplistic approach for illustration and have excluded a number of potentially important factors such as the distinction between reversible and irreversible toxicities.
+
+5.2. Q-function estimation and optimal regimen discovery
+We now return to Q-learning. Utilizing the proposed ODE model, we generate a simulated clinical trial that provides a set of simulated ﬁnite horizon trajectories (or training data),
+{S0i , Ai0, Ri0, Si1, Ai1, Ri1, . . . , Ai5, Ri5, Si6}i1=0010
+where each two-dimensional state variable St consists of (Wt , Mt ), and each continuous action variable At is a dose level Dt . Note that our model ignores, for simplicity, dose history in the state variables, even though past dose is technically a part of the history. We wish to emphasize that it is not necessary to use all available data in Q-learning, and the user has tremendous ﬂexibility in implementing this general approach. Continuing with our example, we will use Q-learning to maximize a sum of numerical rewards, which we now deﬁne, over 6 months. We assume that each reward only depends on the states observed right before and after each action, that is, when t = 0, 1, . . . , 5,
+rt = R(st , at , st+1)
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+Wellness and Tumor Size
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3306
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+6
+
+5
+
+Wellness
+
+Tumor size
+
+4
+
+3
+
+2
+
+1
+
+0
+
+Treatment Results
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Month
+
+Random Actions (Doses) 1.0
+
+0.8
+
+Dose Level
+
+0.6
+
+0.4
+
+0.2
+
+0.0
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Month
+
+Figure 1. Representation of the disease progression for a patient treated from randomized chemotherapy drug. The solid curve represents the negative part of patient’s wellness, the dashed curve represents the
+tumor size, and the dotted curve represents the randomized treatment.
+
+We decompose this reward function Rt into three parts: Rt,1(Dt , Wt+1, Mt+1) due to survival status, Rt,2(Wt , Dt , Wt+1) due to wellness effects, and Rt,3(Mt , Dt , Mt+1) due to tumor size effects. It can be described by
+Rt,1(Dt , Wt+1, Mt+1) = −60 if patient died
+
+otherwise,
+
+⎧⎪⎨5 Rt,2(Wt , Dt , Wt+1) = ⎪⎩−5
+0 ⎧⎪⎪⎪⎪⎨155 Rt,3(Mt , Dt , Mt+1) = ⎪⎪⎪⎪⎩−5
+0
+
+if Wt+1 − Wt −0.5 if Wt+1 − Wt 0.5 otherwise if Mt+1 = 0 if Mt+1 − Mt −0.5, but Mt+1 = 0 if Mt+1 − Mt 0.5 otherwise
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3307
+
+In most phase III clinical trials, the primary endpoint of clinical interest is the overall survival (OS): this is why we put −60 as a high penalty for patient death. Additionally, we assign a relatively high value 15 as a bonus when a patient is cured.
+We assume that survival status depends on both toxicity and tumor size. For each time interval (t −1, t], t = 1, . . . , 6, we deﬁne the hazard function as (t), which satisﬁes
+
+log (t) = 0 + 1Wt + 2 Mt
+
+where 0, 1, and 2 are constant prespeciﬁed parameters. In particular, assigning 1 = 2 = 1 indicates that we consider wellness and tumor size to have an equally weighted inﬂuence on the
+survival rate. The survival function is then
+
+F(t) = exp [− (t)]
+
+where
+
+(t) =
+
+t t −1
+
+(s) d(s) is the cumulative hazard function. The reason the term Rt,1(Dt , Wt+1,
+
+Mt+1) is expressed as a function of Wt+1 and Mt+1 is that the hazard function is only determined
+
+by the states at the end of each time interval. The conditional probability of death for each time
+
+interval is p = 1− F(t). The survival status (with death coded as 1) is drawn according to a
+
+Bernoulli distribution B( p). Overall, by letting = 1 (we would like to fully consider maximizing
+
+rewards in the long run), the one-step Q-learning with recursive form is utilized, with Qt (St , At )
+
+predicting
+
+Rt = Rt +max Qt+1(St+1, at+1)
+at +1
+where Rt = Rt,1(Dt , Wt+1, Mt+1)+ Rt,2(Wt , Dt , Wt+1)+ Rt,3(Mt , Dt , Mt+1), t = 0, . . . , 5. Note
+that rˆt mentioned previously is deﬁned as a realization of Rt . This recursive estimation process is called SARSA (state, action, reward, next state, next action) in the reinforcement learning literature.
+To obtain the estimator Qt , we apply SVR and ERT, respectively, for ﬁtting Qt backward, and save the results as {Q5, Q4, . . . , Q0}. Figure 2 illustrates the treatment plan and relevant Q-function estimation procedures. Because of the inner product property of the kernel in SVM/SVR, scaling the data before applying SVR is very important. Another advantage for scaling is to avoid states with greater numeric ranges dominating those with smaller numeric ranges. In our simulation studies, every variable is scaled to zero mean and unit variance, and the center and scale values are saved and used for later predictions. To do ﬁtting of Qt via SVR, we select the Gaussian kernel (or Radial Basis Function), K (x, y) = exp (− x−y 2), because the Gaussian kernel can nonlinearly map samples into a higher-dimensional space. Consequently, it can handle the case when the relation between rewards (labels) and states and actions (attributes) is nonlinear. In the SVR approach there are two hyperparameters involved with the Gaussian kernel: and the tuning parameter C. To maximize the performance of the proposed method, we apply a grid search to choose C and by using cross-validation. Trying exponentially growing sequences of C and is recommended as a practical method to identify good hyperparameters. Speciﬁcally, for each t in our simulated example, given a straightforward coarse grid search with C = 2−5, 2−3, . . . , 215 and
+= 2−15, 2−13, . . . , 23, we apply cross-validation to each candidate pair (C, ), and then select the pair that yields the highest cross-validation rate. To do ﬁtting of Qt via ERT, we need to be careful with the choice of parameters G, K , and nmin. Based on empirical studies, Geurts et al. [31] suggest that the default value of K should be equal to the number of attributes in the regression problem. Thus, we ﬁx K as the dimension of state variables plus the dimension of action variables,
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3308
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+Figure 2. Treatment plan and the procedure for obtaining the sequential estimator {Q5, Q4, . . . , Q0}.
+
+which is equal to 3 in our case. To maintain good precision and small bias, G and nmin have been chosen equal to 50 and 2, respectively.
+Based on the sequential estimators {Q5, Q4, . . . , Q0}, the individualized optimal policies as a function of the state variables are estimated by maximizing over dose level (i.e. at ):
+
+t
+
+(st
+
+)
+
+=
+
+arg
+
+max
+at
+
+Q
+
+t
+
+(st
+
+,
+
+at
+
+;
+
+ˆ
+
+t
+
+)
+
+In order to evaluate how the above-estimated treatment policies performed, we generated a virtual phase III clinical trial with 200 patients per each of 11 treatments consisting of the estimated optimal treatment regime and each of the 10 possible ﬁxed dose levels ranging from 0.1 to 1.0 with increments of size 0.1. The initial values of W0 and M0 for the patients were randomly chosen from the same uniform distribution used in the training data.
+The entire algorithm for Q-function estimation and optimal regimen evaluation is summarized as follows:
+1. Inputs: a set of training data consists of attributes x (states st , actions at ) and index y (rewards rt ), that is, {(st , at ,rt )i , t = 0, . . . , T, i = 1, . . . , N }.
+2. Initialization: Let t = T +1 and QT +1 be a function equal to zero on St ×At . 3. Iterations: repeat computations until stopping conditions are reached (t = 0).
+(a) t ← t −1. (b) Qt is ﬁtted with SVR or ERT through the following recursive equation:
+
+Q
+
+t
+
+(st
+
+,
+
+at
+
+)
+
+=
+
+rt
+
++
+
+max
+at +1
+
+Q
+
+t
+
++1(st
+
++1
+
+,
+
+at
+
++1
+
+)
+
++
+
+error
+
+(c) Use cross-validation to choose tuning parameters C and if ﬁtting Qt via SVR with Gaussian kernel; choose plausible values of parameters K , G, nmin if ﬁtting Qt via ERT (K = 3, G = 50, nmin = 2 in our simulation).
+4. Given the sequential estimates of {Q0, Q1, . . . , Q5}, the sequential individualized optimal polices { 0, . . . , 5} for application to the virtual phase III trial are computed.
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3309
+
+Table I. Summary of main simulation results.
+
+Optimal regimens
+
+Constant-dose regimens
+
+RL1
+
+RL2
+
+0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+
+W6
+
+1.276
+
+M6
+
+1.993
+
+W6 + M6 3.269
+
+CSP
+
+0.442
+
+1.328 1.866 3.194 0.441
+
+−0.411 4.737 4.326 0.240
+
+0.129 4.017 4.146 0.292
+
+0.669 0.300 3.970 0.345
+
+1.217 2.654 3.870 0.377
+
+1.783 2.133 3.916 0.363
+
+2.375 1.658 4.033 0.331
+
+3.016 1.203 4.219 0.275
+
+3.705 0.812 4.517 0.189
+
+4.421 0.496 4.917 0.061
+
+5.141 0.257 5.397 0.003
+
+Note: Results such as the wellness (W6), tumor size (M6), wellness plus tumor size (W6 + M6), and cumulative survival probability (CSP) are given for the optimal regimen using reinforcement learning methods via SVR (RL1) and ERT (RL2), and for the constant-dose regimen that ranges from 0.1 to 1.0. All numbers are averaged
+over 200 patients. Entries for superior strategies are given in boldface type.
+
+5.3. Simulation results
+In the simulated phase III trial, we examine Wt , Mt , and the patients’ cumulative survival probability. All of these quantities were averaged over the 200 virtual patients. These averages at time t = 6 are given, along with the survival results, in Table I.
+We used a sample size of 1000 for our simulated clinical reinforcement trial and estimated the optimal treatment policy using both SVR and ERT. For the sake of simplicity, unless stated explicitly otherwise, we only show results in the ﬁgures for the SVR method, as we obtain very similar results when we estimate optimal therapy using ERT. In Figures 3 and 4, trajectories (wellness and tumor size, respectively) that would have been observed by putting the patients on constant-dose regimens have been plotted. Note that the wellness measure has been inverted so that larger values represent worse health. This is to make comparisons with tumor size more direct. We test the behavior of estimated optimal regimens on 200 new simulated patients by comparing the outcomes using t from the Qt (t = 0, . . . , 5) against the results obtained using 10 different ﬁxed Dt levels (t = 0, . . . , 5) in the ODE model. As shown in both Figures 3 and 4, the optimal regimens derived from Q-learning do not have better performance for either wellness or tumor size compared with some constant dosing regimens. This is not beyond our expectation. Because when a higher dose level decreases tumor size, it can yield a higher toxicity simultaneously, and vice versa. However, due to our reward functions structure, the estimated optimal policies have an appealing feature that seeks a good balance between toxicity and efﬁcacy. Figure 5 illustrates that the estimated optimal regimen is absolutely superior to any constant-dose regimen when we combine toxicity and efﬁcacy (Wt + Mt ) into one comparison criterion. Table I agrees with this conclusion by, respectively, presenting W6 + M6 = 3.269 (SVR) or W6 + M6 = 3.194 (ERT) as the lowest number compared with the others. Most notably, although the regimen derived from simulated data shows suboptimal results in the ﬁrst 3 months, it achieves the best performance eventually. These ﬁndings agree well with reinforcement learnings substantially powerful long-run capabilities.
+Figure 6 provides the dynamic optimal regimen for an individual patient as well as the toxicity and efﬁcacy values during the whole trial. This simulated patient comes into the trial with initial condition W0 = 0.30 and M0 = 1.05. Optimal therapy begins with a very high dose D0 = 1.00 aimed at reducing the patient’s tumor burden. The patient is then monitored for the following month and then treated with another two consecutive high doses (D1 = 0.74, D2 = 1.00). In the third month, the tumor size suddenly reaches 0, that is, the patient has been cured. As expected, we ﬁnd that
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3310
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+200 patients average wellness
+
+6
+
+0.1
+
+0.2
+
+0.3
+
+5
+
+0.4
+
+0.5
+
+0.6
+
+0.7
+
+4
+
+0.8
+
+0.9
+
+1.0
+
+3
+
+optimal
+
+2
+
+1
+
+0
+
+1.0 0.9
+0.8 0.7 0.6 0.5 optimal 0.4 0.3 0.2 0.1
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Month
+
+Figure 3. Plots of averaged value of ‘wellness’ (negative part) for 10 different constant-dose regimens compared with optimal regimen. The results are based on 200 patients. Dashed curves represent the
+constant-dose regimens, and a solid curve represents the optimal regimen.
+
+200 patients average tumor size
+
+5
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+4
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+3
+
+0.9
+
+1.0
+
+optimal
+
+2
+
+1
+
+0
+
+0
+
+1
+
+2
+
+3
+
+4
+
+Month
+
+0.1
+
+0.2
+
+0.3
+
+0.4 0.5
+optimal 0.6
+0.7 0.8 0.9
+1.0
+
+5
+
+6
+
+Figure 4. Plots of averaged value of ‘tumor size’ for 10 different constant-dose regimens compared with the optimal regimen. The results are based on 200 patients. Dashed curves represent the constant-dose
+regimens, and a solid curve represents the optimal regimen.
+
+the dosage to be administrated rapidly reduces to 0 in the following months. Patients who recover after 3 months will not receive high dosing anymore because the high dose will likely result in unnecessarily high toxicity. As we can see, rather than the constant-dose level for each t, optimal therapy usually has an up-and-down structure due to its adaptive properties. This is an important result that demonstrates that the optimal policy can be approximated very well by reinforcement learning.
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3311
+
+200 patients average wellness + tumor Size
+
+6
+
+0.1
+
+0.2
+
+0.3
+
+0.4
+
+5
+
+0.5
+
+0.6
+
+0.7
+
+0.8
+
+4
+
+0.9
+
+1.0
+
+optimal
+
+3
+
+1.0
+0.9
+0.8 0.1 0.7 0.2 0.6 0.3 0.5 0.4
+optimal
+
+2
+
+1
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Month
+
+Figure 5. Plots of averaged value of ‘wellness+tumor size’ for 10 different constant-dose regimens compared with the optimal regimen. The results are based on 200 patients. Dashed curves represent the
+constant-dose regimens, and a solid curve represents the optimal regimen.
+
+Finally, compared with all ﬁxed-level doses, Table I clearly shows that the therapy found using the Q-learning approach with either SVR or ERT has better performance in terms of cumulative survival probability (CSP). Both SVR and ERT appear to perform equally well with comparable computational burden.
+
+6. DISCUSSION
+
+We have developed a reinforcement learning method for discovering effective therapeutic regimens in clinical trial design. To investigate the validity of such a purely data-(model-free) driven approach, we have generated clinical data by relying on a set of hypothetical (and simplistic) but plausible ODE models. Based on these simulated data, we have found that reinforcement learning is indeed able to identify individualized optimal regimens in clinical trials that consist of multiple courses of treatment. Such regimens can reduce tumor burden while taking into account a drug’s toxicity. Treatment delay effects, which is an important issue that must be considered for longer-term outcomes, are fully assessed by this method. Another appealing feature of our approach is the incorporation of Q-learning methodology with SVR and ERT. Hence even in a data set comprised of high-dimensional attributes, our method is capable of obtaining promising results without much computational burden.
+There are a number of challenges we expect to face in future research. First of all, in our study we have deﬁned the reward as a straightforward function to map states and actions into some integer numbers (15, 5, 0, −5 and −60). This simplistic reward function construction along with Q-learning represents an attractive way for trading-off efﬁcacy against toxicity and death. However, it is unclear how changing these numbers affects the resulting optimal regimens identiﬁed during discovery of effective therapeutic strategies. Understanding the robustness of Q-learning to numerical reward choices is an interesting problem and clearly deserves further investigation.
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3312
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+Wellness and Tumor Size
+
+6
+
+5
+
+Wellness
+
+Tumor size
+
+4
+
+3
+
+2
+
+1
+
+0
+
+Treatment Results
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Month
+
+Estimated Optimal Regimen
+1.0
+
+0.8
+
+0.6
+
+0.4
+
+0.2
+
+0.0
+
+0
+
+1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Month
+
+Figure 6. Representation of the optimal treatment for a patient with W0 = 0.30 and M0 = 1.05. The optimal treatment sequence (Dt ∈ {1.00, 0.74, 1.00, 0.04, 0.01, 0.01}) is computed by the proposed reinforcement learning methods on clinical data generated by 1000 patients. The solid curve represents the negative part of patient’s wellness, the dashed curve represents the tumor size, and the dotted
+curve represents the estimated optimal regimen.
+
+Dose Level
+
+Second, as the choice of reward function plays a crucial role in reinforcement learning, therefore, it is very important to consider alternative rewards directly reﬂecting primary endpoints (such as OS, progression-free survival, quality-of-life-adjusted survival, freedom from side effects, etc.) in clinical trial designs. One of the many feasible approaches for accomplishing this is to perform retrospective analyses on existing clinical trial data to identify clinical factors that inﬂuence the outcome of patients treated with chemotherapy drugs, and to build a model that can be used in practice to predict long-term survival in this patient population. Such a model may assist us in building a more plausible reward function, and thereafter determining a regimen that is as close as possible to an optimal policy. To construct a clinically relevant reward function, we believe that close collaboration with clinical researchers is required. An interesting illustrative example of a related strategy is shown by Ernst et al. [32]. They consider discounted instantaneous costs (which is a continuous function directly associated with actions) as their reward function: the rationale behind this comes from a validated and identiﬁed HIV model [34].
+In this paper, we observed that with sample size N = 1000 for a clinical reinforcement trial, using SVR or ERT leads to a reasonably low bias for estimating optimal regimens. The evidence for this is the conﬁrmed success of the discovered treatment regimen on an independent sample
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3313
+
+of 200 simulated patients. Clearly, in many settings, this assumption may be violated due to the complexity associated with the performance of the approximation on the Q function, the highdimensional state or action space, the horizon time T , the connection with SVR or ERT, and more importantly, estimation accuracy. Therefore, an interesting but potentially difﬁcult question would be: how to determine the number of patients N required in a clinical reinforcement trial, utilizing SVR or ERT to ﬁt Q, which can be guaranteed to obtain a regimen that is very close to the optimal one. All these theoretical issues are under investigation and will be presented elsewhere.
+As the work of this paper is motivated by the clinical question of proper treatment for Stage IIIB/IV NSCLC, as examined by several clinical trials conducted at the UNC Lineberger Comprehensive Cancer Center (LCCC), an important future application is to reﬁne our model to more accurately reﬂect NSCLC and the associated treatment issues. The goal of this future study is to compare strategies for multiple lines of treatment for patients with advanced NSCLC who have not been treated previously with systemic therapy. In our future study we will apply reinforcement learning to discover individualized optimal regimens while restricting attention to ﬁrst-line and second-line only, as there is only one approved agent (Erlotinib) indicated for third-line treatment [35].
+First-line treatment primarily consists of platinum-based doublets that include cisplatin, gemcitabine, pemetrexed, paclitaxel, carboplatin, or vinorelbine. Numerous studies have compared these various platinum doublets; the great majority of these trials have concluded that all such regimens are comparable in their clinical efﬁcacy. As an example, see Scagliotti et al. [36]. Their study represents the largest number of patients entered into a single phase III study using either cisplatin+gemcitabine or cisplatin+pemetrexed regimens. Noninferiority was demonstrated because the median survival time was an identical 10.3 months in each arm. In addition to platinumbased doublets, some phase III studies have examined the efﬁcacy of various targeted therapies. Bevacizumab plus paclitaxel+carboplatin in the treatment of selected patients with NSCLC showed a signiﬁcant survival beneﬁt [37], however, with the risk of increased treatment-related deaths. Cetuximab plus cisplatin+vinorelbine demonstrated superior survival in patients with advanced EGFR-detectable NSCLC [38]. The strategies of ﬁrst-line therapy are essentially based on these four targeted combination therapies, the choice depends on a number of factors, including the patient’s histology type, toxicity proﬁle, smoking history, VEGF level, EGFR expression, and race [36–38].
+There are three agents approved for treating patients in a second-line regimen: docetaxel, pemetrexed, and erlotinib. Similar to the ﬁrst-line regimen, these agents appear to have similar efﬁcacies in terms of response and OS, but have signiﬁcantly different toxicity proﬁles. The choice of agent also depends on many factors, including the patient’s number of prior regimens, response to prior chemotherapy, the risk for neutropenia, EGFR expression, and patient preference [39–42].
+Owing to the complexity of the biomarkers and unclear toxicities, the trial described here was motivated by the desire to compare those agents in a randomized fashion, and the belief that different combinations given between ﬁrst-line and second-line may have interactive effects. Another very important factor omitted from the cancer treatment model given in this paper, is the potentially enormous difference between reversible and irreversible toxicities. This difference will need to be incorporated in future studies on this topic. Despite the difﬁculty of discovering superior therapies, another primary challenge is to determine the optimal second-line regimen’s starting time, either immediate or delayed after induction therapy, having the highest OS probability. Although Fidias et al. [41] provided some results to suggest that an immediate transition to second-line therapy may be optimal, whether these ﬁndings are speciﬁc to docetaxel or would hold true for other common second-line options such as pemetrexed or erlotinib remains unknown. Hence, optimal timing of
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+3314
+
+Y. ZHAO, M. R. KOSOROK AND D. ZENG
+
+second-line therapy with a non-cross-resistant agent is an important issue and still remains unclear. Furthermore, including biomarkers as covariates to assess possible effects, such as biomarker treatment interactions and biomarker second-line-timing interactions, is potentially useful. In our future research, a better understanding of prognostic factors is needed, and this may lead us to discover better individualized therapies using reinforcement learning. In addition to developing new treatments for NSCLC, there is signiﬁcant potential of the proposed strategy for developing personalized treatment strategies in other cancers, in cystic ﬁbrosis, and in other acute and chronic diseases.
+
+ACKNOWLEDGEMENTS
+The authors would like to thank Dr Mark Socinski for helpful discussions on nonsmall cell lung cancer treatment and the Reinforcement Learning Group at the University of North Carolina for many stimulating exchanges. The research was funded in part by grant CA075142 from the U.S. National Cancer Institute and from pilot funding provided by the Center for Innovative Clinical Trials at the UNC Gillings School of Global Public Health. The authors also thank two anonymous referees who provided helpful comments that led to a signiﬁcantly improved paper.
+
+REFERENCES
+1. Hogberg T. Widening bottlenecks in drug discovery Glimpses from Drug Discovery Technology Europe. Drug Discovery Today 2005; 10(12):820–822.
+2. Food and Drug Administration. Innovation or stagnation: challenge and opportunity on the critical path to new medical products. White Paper, 2004.
+3. Stinchcombe TE, Socinski MA. Considerations for second-line therapy of non-small cell lung cancer. The Oncologist 2008; 13(suppl. 1):28–36.
+4. Thall PF, Millikan RE, Sung HG. Evaluating multiple treatment courses in clinical trials. Statistics in Medicine 2000; 19:1011–1028.
+5. Thall PF, Wooten LH, Logothetis CJ, Millikan RE, Tannir NM. Bayesian and frequentist two-stage treatment strategies based on sequential failure times subject to interval censoring. Statistics in Medicine 2007; 26: 4687–4702.
+6. Murphy SA. An experimental design for the development of adaptive treatment strategies. Statistics in Medicine 2005; 24:1455–1481.
+7. Murphy SA, Lynch KG, Oslin D, McKay JR, TenHave T. Developing adaptive treatment strategies in substance abuse research. Drug and Alcohol Dependence 2007; 88S:S24–S30.
+8. Pineau J, Bellemare MG, Rush AJ, Ghizaru A, Murphy SA. Constructing evidence-based treatment strategies using methods from computer science. Drug and Alcohol Dependence 2007; 88S:S52–S60.
+9. Murphy SA, Oslin DW, Rush AJ, Zhu J. Methodological challenges in constructing effective treatment sequences for chronic psychiatric disorders. Neuropsychoarmacology 2007; 32:257–262.
+10. Sahba F, Tizhoosh HR, Salama MM. Application of reinforcement learning for segmentation of transrectal ultrasound images. BMC Medical Imaging 2008; 8(8).
+11. Sutton RS, Barto AG. Reinforcement Learning: An Introduction. MIT Press: Cambridge, MA, 1998. 12. Bellman RE. Dynamic Programming. Princeton University Press: Princeton, 1957. 13. Minsky ML. Steps toward artiﬁcial intelligence. Proceedings of the Institute of Radio Engineers 1961; 49:8–30. 14. Howard R. Dynamic Programming and Markov Processes. MIT Press: Cambridge, MA, 1960. 15. Puterman ML, Shin MC. Modiﬁed policy iteration algorithms for discounted Markov decision problems.
+Management Science 1978; 24:1127–1137. 16. Bertsekas DP. Dynamic Programming: Deterministic and Stochastic Models. Prentice-Hall: Englewood Cliffs, 1987. 17. Sutton RS. Learning to predict by the method of temporal differences. Machine Learning 1988; 3(1):9–44. 18. Kaelbling LP, Littman ML, Moore AW. Reinforcement learning: a survey. Journal of Artiﬁcial Intelligence
+Research 1996; 4:237–285. 19. Watkins CJCH. Learning from delayed rewards. Ph.D. Thesis, King’s College, Cambridge, U.K., 1989.
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+
+10970258, 2009, 26, Downloaded from https://onlinelibrary.wiley.com/doi/10.1002/sim.3720 by Isae, Wiley Online Library on [05/01/2024]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+
+REINFORCEMENT LEARNING DESIGN
+
+3315
+
+20. Watkins CJCH, Dayan P. Q-learning. Machine Learning 1992; 8:279–292. 21. Murphy SA. A generalization error for Q-learning. Journal of Machine Learning Research 2005; 6:1073–1097. 22. Tsitsiklis JN, Van Roy B. Feature-based methods for large scale dynamic programming. Machine Learning 1996;
+22:59–94. 23. Vapnik V, Golowich S, Smola A. Support vector method for function approximation, regression estimation, and
+signal processing. Advances in Neural Information Processing Systems 1997; 9:281–287. 24. Vapnik V. The Nature of Statistical Learning Theory. Springer: New York, 1995. 25. Cover TM. Geometrical and statistical properties of systems of linear inequalities with applications in pattern
+recognition. IEEE Transactions on Electronic Computers 1965; 14:326–334. 26. Cortes C, Vapnik V. Support-vector networks. Machine Learning 1995; 20:273–297. 27. Chen BJ, Chang MW, Lin CJ. Load forecasting using support vector machines: a study on EUNITE competition
+2001. IEEE Transactions on Power Systems 2004; 19:1821–1830. 28. Smola A, Scholkopf B. A tutorial on support vector regression. Statistics and Computing 2004; 14:199–222. 29. LIBSVM: a library for support vector machines (version 2.31). Available from: http://www.csie.ntu.edu.tw/˜cjlin/
+libsvm [7 September 2001]. 30. Ernst D, Geurts P, Wehenkel L. Tree-based batch model reinforcement learning. Journal of Machine Learning
+Research 2005; 6:503–556. 31. Geurts P, Ernst D, Wehenkel L. Extremely randomized trees. Machine Learning 2006; 11:3–42. 32. Ernst D, Stan GB, Goncalves J, Wehenkel L. Clinical data based optimal STI strategies for HIV: a reinforcement
+learning approach. Proceedings of the 45th IEEE Conference on Decision and Control, San Diego, U.S.A., 2008; 1671–1678. 33. Guez A, Vincent R, Avoli M, Pineau J. Adaptive treatment of Epilepsy via batch-mode reinforcement learning. Innovative Applications of Artiﬁcial Intelligence 2008. 34. Adams B, Banks H, Kwon HD, Tran H. Dynamic multidrug therapies for HIV: optimal and STI control approaches. Mathematical Biosciences and Engineering 2004; 1:223–241. 35. Shepherd FA, Pereira JR, Ciuleanu T, Tan EH, Hirsh V, Thongprasert S, Campos D, Maoleekoonpiroj S, Smylie M, Martins R, van Kooten M, Dediu M, Findlay B, Tu D, Johnston D, Bezjak A, Clark G, Santabarbara P, Seymo L. Erlotinib in previously treated non-small-cell lung cancer. The New England Journal of Medicine 2005; 353:123–132. 36. Scagliotti GV, Parikh P, Von Pawel J, Biesma B, Vansteenkiste J, Manegold C, Serwatowski P, Gatzemeier U, Digumarti R, Zukin M, Lee JS, Mellemgaard A, Park K, Patil S, Rolski J, Goksel T, de Marinis F, Simms L, Sugarman KP, Gandara D. Phase III study comparing cisplatin plus gemcitabine with cisplatin plus pemetrexed in chemotherapy-naive patients with advanced-stage non-small-cell lung cancer. Journal of Clinical Oncology 2008; 26:3543–3551. 37. Sandler A, Gray R, Perry MC, Brahmer J, Schiller JH, Dowlati A, Lilenbaum R, Johnson DH. PaclitaxelCarboplatin alone or with bevacizumab for non-small-cell lung cancer. The New England Journal of Medicine 2006; 355:2542–2550. 38. Pirker R, Szczesna A, Von Pawel J, Krzakowski M, Ramlau R, Park K, Gatzemeier U, Bajeta E, Emig M, Pereira JR. FLEX: a randomized, multicenter, phase III study of cetuximab in combination with cisplatin/vinorelbine (CV) versus CV alone in the ﬁrst-line treatment of patients with advanced non-small cell lung cancer (NSCLC). Journal of Clinical Oncology 2008; abstr 3. 39. Shepherd FA, Dancey J, Ramlau R, Mattson K, Gralla R, O’Rourke M, Levitan N, Gressot L, Vincent M, Burkes R, Coughlin S, Kim Y, Berille J. Prospective randomized trial of docetaxel versus best supportive care in patients with non-small-cell lung cancer previously treated with platinum-based chemotherapy. Journal of Clinical Oncology 2000; 18:2095–2103. 40. Hanna N, Shepherd FA, Fossella FV, Pereira JR, de Marinis F, Von Pawel J, Gatzemeier U, Chang T, Tsao Y, Pless M, Muller T, Lim HL, Desch C, Szondy K, Gervais R, Shaharyar, Manegold C, Paul S, Paoletti P, Einhorn L, Bunn PA. Randomized phase III trial of pemetrexed versus docetaxel in patients with non-small-cell lung cancer previously treated with chemotherapy. Journal of Clinical Oncology 2004; 22:1589–1597. 41. Fidias P, Dakhil S, Lyss A, Loesch D, Waterhouse D, Cunneen J, Chen R, Treat J, Obasaju C, Schiller J. Phase III study of immediate versus delayed docetaxel after induction therapy with gemcitabine plus carboplatin in advanced non-small-cell lung cancer: updated report with survival. ASCO 2007, vol. 25, 20 June suppl, LBA7516. 42. Ciuleanu TE, Brodowicz T, Belani CP, Kim J, Krzakowski M, Laack E, Wu Y, Peterson P, Adachi S, Zielinski CC. Maintenance pemetrexed plus best supportive care (BSC) versus placebo plus BSC: a phase III study. ASCO 2008; abstr 8011.
+
+Copyright q 2009 John Wiley & Sons, Ltd.
+
+Statist. Med. 2009; 28:3294–3315 DOI: 10.1002/sim
+

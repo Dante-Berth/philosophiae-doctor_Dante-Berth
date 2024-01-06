@@ -7,8 +7,6 @@ Besides, a grammar which can be viewed as a language connect signals to behavior
 And translate grammar statements into mathematics and code automatically.
 
 ## Behaviors in PhysiCell
-
-
 ![[../ressources_ws2023_PhysiCell_copied/sessions/session_03/PhysiCell_ws2023_Session03.pdf#page=15]]
 
 The dictionary of behaviors is composed of : 9 known behavior and 1 unknown behavior called "custom symbol".

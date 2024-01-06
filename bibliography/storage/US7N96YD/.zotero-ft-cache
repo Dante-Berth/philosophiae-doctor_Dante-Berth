@@ -1,0 +1,85 @@
+
+Pour améliorer votre expérience, nous (et nos partenaires) stockons et/ou accédons à des informations sur votre terminal (cookie ou équivalent) avec votre accord pour tous nos sites et applications, sur vos terminaux connectés.
+
+Notre site Web peut utiliser ces cookies pour :
+
+    Mesurer l'audience de la publicité sur notre site, sans profilage
+    Afficher des publicités personnalisées basées sur votre navigation et votre profil
+    Personnaliser notre contenu éditorial en fonction de votre navigation
+    Vous permettre de partager du contenu sur les réseaux sociaux ou les plateformes présents sur notre site Internet
+
+Politique de confidentialité
+Gérer les préférences Accepter tout Tout rejeter
+
+    Skip to Article Content
+    Skip to Article Information
+
+We’ve updated the Wiley Online Library Terms of Use, effective 28th December 2023 - Updated Terms of Use
+Wiley Online Library
+Isae
+Search within
+
+    Search term
+
+Login / Register
+Statistics in Medicine
+Volume 28, Issue 26 p. 3294-3315 Statistics in Medicine
+Research Article
+Full Access
+Reinforcement learning design for cancer clinical trials
+Yufan Zhao , 
+Michael R. Kosorok , 
+Department of Biostatistics, University of North Carolina at Chapel Hill, Chapel Hill, NC 27599, U.S.A.
+Donglin Zeng , 
+First published: 11 September 2009
+https://doi.org/10.1002/sim.3720
+Citations: 140
+PDF PDF
+Tools
+Share
+Abstract
+
+We develop reinforcement learning trials for discovering individualized treatment regimens for life-threatening diseases such as cancer. A temporal-difference learning method called Q-learning is utilized that involves learning an optimal policy from a single training set of finite longitudinal patient trajectories. Approximating the Q-function with time-indexed parameters can be achieved by using support vector regression or extremely randomized trees. Within this framework, we demonstrate that the procedure can extract optimal strategies directly from clinical data without relying on the identification of any accurate mathematical models, unlike approaches based on adaptive design. We show that reinforcement learning has tremendous potential in clinical research because it can select actions that improve outcomes by taking into account delayed effects even when the relationship between actions and outcomes is not fully known. To support our claims, the methodology's practical utility is illustrated in a simulation analysis. In the immediate future, we will apply this general strategy to studying and identifying new treatments for advanced metastatic stage IIIB/IV non-small cell lung cancer, which usually includes multiple lines of chemotherapy treatment. Moreover, there is significant potential of the proposed methodology for developing personalized treatment strategies in other cancers, in cystic fibrosis, and in other life-threatening diseases. Copyright © 2009 John Wiley & Sons, Ltd.
+REFERENCES
+Citing Literature
+
+Volume 28 , Issue 26
+
+20 November 2009
+
+Pages 3294-3315
+
+    References
+    Related
+    Information
+
+Download PDF
+Additional links
+About Wiley Online Library
+
+    Privacy Policy
+    Terms of Use
+    About Cookies
+    Manage Cookies
+    Accessibility
+    Wiley Research DE&I Statement and Publishing Policies
+    Developing World Access
+
+Help & Support
+
+    Contact Us
+    Training and Support
+    DMCA & Reporting Piracy
+
+Opportunities
+
+    Subscription Agents
+    Advertisers & Corporate Partners
+
+Connect with Wiley
+
+    The Wiley Network
+    Wiley Press Room
+
+Copyright © 1999-2024 John Wiley & Sons, Inc . All rights reserved
+Wiley Home Page
