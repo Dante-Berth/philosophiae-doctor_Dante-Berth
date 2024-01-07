@@ -76,5 +76,6 @@ int main()
             cout<<n<< " is a multiple of 3";
         }
     }
+    while (1);
     return 0;
 }
